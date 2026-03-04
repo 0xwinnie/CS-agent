@@ -277,16 +277,14 @@ async function generateSoulfulResponse(
   
   if (classification.isSNSSpecific || isStrictQuestion) {
     let answer: string | null = null;
-    let answerSource = '';
     
-    // Try RAG if embeddings exist
+    // Try RAG if embeddings exist (primary method)
     if (hasEmbeddings()) {
       console.log('🧠 Using RAG (Retrieval-Augmented Generation)...');
       const ragResult = await generateRAGAnswer(userMessage, userLanguage);
       
       if (ragResult && ragResult.confidence >= 0.6) {
         answer = ragResult.answer;
-        answerSource = '📚 基于知识库';
         console.log(`✅ RAG answer generated (confidence: ${ragResult.confidence.toFixed(2)})`);
       }
     }
@@ -297,7 +295,6 @@ async function generateSoulfulResponse(
       const kbMatch = searchKnowledgeBase(userMessage);
       if (kbMatch && kbMatch.score >= 0.5) {
         answer = kbMatch.entry.answer;
-        answerSource = userLanguage === 'zh' ? '📚 来自知识库' : '📚 From knowledge base';
         console.log(`✅ Keyword match (score: ${kbMatch.score.toFixed(2)})`);
       }
     }
@@ -309,7 +306,6 @@ async function generateSoulfulResponse(
         const notebookResult = await queryNotebookLM(userMessage);
         if (notebookResult && notebookResult.confidence >= 0.7) {
           answer = notebookResult.answer;
-          answerSource = '📚 来自官方文档';
           console.log('✅ Answer from NotebookLM');
         }
       } catch (error) {
@@ -319,13 +315,8 @@ async function generateSoulfulResponse(
     
     // CASE 1: Got answer
     if (answer) {
-      // Add source tag for non-trusted users
-      const shouldAddSource = userMemory.trustLevel !== 'trusted' && answerSource;
-      const finalAnswer = shouldAddSource 
-        ? `${answer}\n\n${answerSource}`
-        : answer;
-      
-      return finalAnswer;
+      // RAG service already includes sources in answer, don't add duplicate
+      return answer;
     }
     
     // CASE 2: No answer found → Say "I don't know"

@@ -69,25 +69,16 @@ async function synthesizeAnswer(
     .map((r, i) => `FAQ ${i + 1} (relevance: ${(r.similarity * 100).toFixed(0)}%):\nQ: ${r.entry.question}\nA: ${r.entry.answer}`)
     .join('\n\n');
 
-  const systemPrompt = userLanguage === 'zh'
-    ? `你是一个 SNS (Solana Name Service) 社区助手。请基于提供的 FAQ 内容回答用户问题。
+  const systemPrompt = `You are a helpful assistant for the SNS (Solana Name Service) community. Answer based on the provided FAQ content.
 
-重要规则：
-1. 只使用提供的 FAQ 内容回答，不要编造信息
-2. 如果 FAQ 内容不足以回答问题，诚实地说不知道
-3. 保持友好、简洁的语气
-4. 适当使用 emoji
-5. 回答后用 📚 标注信息来源`
-    : `You are a helpful assistant for the SNS (Solana Name Service) community. Answer based on the provided FAQ content.
+IMPORTANT RULES:
+1. ALWAYS respond in ENGLISH (default for international community)
+2. Only use the provided FAQ content, do not make up information
+3. If the FAQ content is insufficient, honestly say you don't know
+4. Keep a friendly, concise tone
+5. Use emoji appropriately (1-2 max)`;
 
-Important rules:
-1. Only use the provided FAQ content, do not make up information
-2. If the FAQ content is insufficient, honestly say you don't know
-3. Keep a friendly, concise tone
-4. Use emoji appropriately
-5. Cite sources with 📚 at the end`;
-
-  const userPrompt = `User question: "${question}"\n\nRelevant FAQs:\n${contextText}\n\n${userLanguage === 'zh' ? '请基于以上 FAQ 回答用户问题：' : 'Please answer based on the FAQs above:'}`;
+  const userPrompt = `User question: "${question}"\n\nRelevant FAQs:\n${contextText}\n\nPlease answer based on the FAQs above. Respond in ENGLISH:`;
 
   try {
     const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
