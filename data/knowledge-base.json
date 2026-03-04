@@ -306,5 +306,40 @@
     "keywords": ["setup", "configure", "process", "flow", "steps", "complete", "guide", "how to setup", "configuration"],
     "answer": "**Complete sol.site Configuration Flow:**\n\n**Step 1: Acquire .sol Domain**\n• Purchase via https://www.sns.id\n• Format: example.sol\n• Price: Based on character length (3-4 chars premium, 5+ standard)\n\n**Step 2: Select Hosting Provider**\nGet DNS records from your hosting platform:\n\n| Platform | Use Case | How to Get Records |\n|----------|----------|-------------------|\n| Vercel | React/Next.js apps | Dashboard → Domains → Enter sol.site → Copy records |\n| GitHub Pages | Static sites | Settings → Pages → Custom domain → Get A/AAAA records |\n| AWS + CloudFront | Enterprise | Route 53 or CloudFront CNAME |\n| Cloudflare Pages | Edge deployment | Dashboard → Custom domains → Get records (coming in 8 weeks) |\n\n**PSL Note:** sol.site is on the Public Suffix List. All major platforms should support it. If not, contact platform support—it's their PSL sync issue, not sol.site.\n\n**Step 3: SNS DNS Configuration**\nPath: SNS Platform → Domain profile → sol.site section → Configure Records\n\nSupported Records:\n• CNAME: 1 record (points to CDN/hosting)\n• A Records: Up to 3 (IPv4)\n• AAAA Records: Up to 3 (IPv6)\n• MX Records: Up to 4 (email)\n• TXT Records: Up to 5 (verification, SPF)\n\n**Step 4: DNS Propagation**\n• Typical time: 5 minutes to 24 hours\n• Depends on DNS TTL and caching\n• Check with dig or online propagation tools\n\n**Step 5: Access Verification**\n• Browser: https://example.sol.site\n• HTTPS certificate auto-issued via Let's Encrypt",
     "confidence": 1.0
+  },
+  {
+    "id": "sol-site-vs-eth-limo",
+    "question": "How does sol.site compare to eth.limo?",
+    "keywords": ["eth.limo", "ENS", "comparison", "vs", "difference", "competitor", "IPFS", "ethereum"],
+    "answer": "**sol.site vs eth.limo Comparison:**\n\n| Feature | eth.limo (ENS) | .sol.site (SNS) |\n|---------|----------------|-----------------|\n| **Product Positioning** | Web3→Web2 Content Gateway | Web3 Identity→Web2 Domain Bridge |\n| **Technical Nature** | IPFS reverse proxy | PSL-certified domain + DNS |\n| **Browser Support** | Requires extensions/Brave | All modern browsers (native) |\n| **Hosting Support** | ❌ Cannot bind to Vercel/GitHub | ✅ Supports Vercel, GitHub Pages, AWS |\n| **SSL Certificate** | ❌ Cannot apply independently | ✅ Auto-issued via Let's Encrypt |\n| **Content Type** | Static only (IPFS) | Dynamic apps, Serverless |\n| **SEO Support** | Limited | Full support |\n| **Cookie Isolation** | All *.eth.limo share cookies | Each *.sol.site independent |\n| **Cost** | Annual renewal ($5-$640) | One-time ($20) |\n\n**Key Advantage:** sol.site uses standard DNS infrastructure that works everywhere, while eth.limo requires understanding IPFS/contenthash and only works with extensions.",
+    "confidence": 1.0
+  },
+  {
+    "id": "sol-site-vs-unstoppable-domains",
+    "question": "How does sol.site compare to Unstoppable Domains?",
+    "keywords": ["unstoppable domains", "UD", ".crypto", ".x", ".nft", "comparison", "difference"],
+    "answer": "**sol.site vs Unstoppable Domains Comparison:**\n\n| Aspect | Unstoppable Domains | sol.site |\n|--------|---------------------|----------|\n| **Browser Extension** | Required | Not required |\n| **Native Support** | Only Brave browser | All modern browsers |\n| **Protocol** | Blockchain + IPFS | Standard DNS + HTTP |\n| **Configuration** | Complex (gas fees, IPFS) | Medium (standard DNS) |\n| **Content Hosting** | Decentralized (IPFS only) | Centralized (Vercel/AWS) |\n| **Performance** | IPFS-dependent | Traditional CDN speed |\n| **Dynamic Apps** | ❌ Static only | ✅ Full support |\n| **SEO** | Limited | Full support |\n\n**Pricing Comparison (UD .crypto vs .sol):**\n| Length | UD .crypto | .sol |\n|--------|-----------|------|\n| 5 chars | $300 | $20 |\n| 6 chars | $200 | $20 |\n| 8+ chars | $40 | $20 |\n\n**User Flow Complexity:**\n- **UD**: Purchase → Mint (gas) → Upload to IPFS → Get CID → Configure → Visitors need extension\n- **sol.site**: Purchase → Get DNS from host → Enter in SNS panel → Done (any browser)",
+    "confidence": 1.0
+  },
+  {
+    "id": "sol-site-cost-comparison",
+    "question": "How much does sol.site cost compared to traditional domains?",
+    "keywords": ["cost", "price", "compare", "expensive", "cheap", "renewal", "5 year", "budget"],
+    "answer": "**5-Year Total Cost Comparison:**\n\n| Domain Type | Initial Cost | Annual Renewal | 5-Year Total | Privacy |\n|-------------|--------------|----------------|--------------|---------|\n| **.sol + sol.site** | $20 | $0 | **$20** | Free |\n| Unstoppable Domains | $40-300 | $0 | $40-300 | Free |\n| GoDaddy (.com) | $0.01-15 | $18.29 | $91.46 | $9.99/yr |\n| Namecheap (.com) | $10-13 | $13.48 | $67.42 | Free |\n| Hostinger (.id) | $12.99 | $15.99 | $79.95 | Paid |\n\n**Key Advantage:**\n• **.sol + sol.site = $20 forever** (one-time payment)\n• Traditional domains = $67-91 over 5 years (and keeps renewing)\n• No surprise renewal fees, no price hikes\n\n**Ownership Model:**\n• Traditional domains = Lease (lose if not renewed)\n• .sol + sol.site = Permanent (yours forever)",
+    "confidence": 1.0
+  },
+  {
+    "id": "sol-site-use-cases",
+    "question": "What are the real-world use cases for sol.site?",
+    "keywords": ["use case", "example", "scenario", "who should use", "purpose", "website type"],
+    "answer": "**Real-World Use Cases for sol.site:**\n\n**1. Personal Brand**\n• Entrepreneurs: john.sol.site as personal homepage\n• Showcase portfolio, social links, contact info\n• Set up once, own forever\n\n**2. Project Showcase**\n• Web3 projects: project.sol.site\n• Dynamically update project progress\n• Community can access directly via domain\n\n**3. Business Alternative**\n• Small businesses save on domain costs\n• Censorship-resistant business presence\n• Web3-native customer recognition\n\n**4. What You Can Build:**\n• Personal portfolio/resume sites\n• Project landing pages\n• Business websites\n• Blogs and content sites\n• Community hubs\n• Email addresses (anything@yourname.sol.site)\n\n**Works With:** Vercel, GitHub Pages, AWS, Cloudflare (coming soon), and any standard web hosting.",
+    "confidence": 1.0
+  },
+  {
+    "id": "sol-site-limitations",
+    "question": "What are the limitations and restrictions of sol.site?",
+    "keywords": ["limitation", "restriction", "not supported", "can't", "unable", "block", "delay"],
+    "answer": "**Important Limitations of sol.site:**\n\n**⚠️ Character Restrictions**\n• Allowed: a-z, 0-9, hyphen (-)\n• **Not supported:** Emojis, Chinese/Japanese/Korean characters, special symbols\n\n**⚠️ Domain Type Restrictions**\n• Not available for: Subdomains, listed domains, sub-registrar domains\n\n**⚠️ Risk Score Restrictions**\n• High-risk domains flagged by SNS engine are blocked\n• Example: paypal.sol, brand impersonations\n\n**⚠️ New Domain Activation Delay**\n• Newly registered domains: sol.site may take **6+ hours** to work\n• Reason: DNS propagation + SSL certificate provisioning\n\n**⚠️ Holding Period Restriction**\n• External DNS configuration disabled if domain held < 48 hours\n• Security measure to prevent abuse\n\n**⚠️ Technical Limitations**\n• Requires owning the .sol domain first\n• DNS configuration knowledge needed\n• Propagation time varies (5 min to 24 hours)",
+    "confidence": 1.0
   }
 ]
