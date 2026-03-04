@@ -5,6 +5,8 @@
 
 import { Message, Client, TextChannel, DMChannel } from 'discord.js';
 import { config } from '../config/env';
+import { searchKnowledgeBase, logUnknownQuestion } from '../services/knowledgeBase';
+import { classifySNSQuestion, requiresStrictAnswer } from '../services/snsClassifier';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -239,7 +241,10 @@ function detectLanguage(message: string): 'zh' | 'en' {
 }
 
 /**
- * Generate response using AI with soul
+ * Generate response using conservative strategy:
+ * 1. SNS-specific questions → Check KB first, if no match → say "don't know"
+ * 2. Non-SNS questions → Let AI answer freely
+ * 3. Strict questions (pricing, procedures) → MUST have KB match
  */
 async function generateSoulfulResponse(
   userMessage: string,
@@ -251,13 +256,81 @@ async function generateSoulfulResponse(
   // Detect user language for this specific message
   const userLanguage = detectLanguage(userMessage);
   
+  // Step 1: Classify if this is an SNS-specific question
+  const classification = classifySNSQuestion(userMessage);
+  console.log(`🔍 Question classification: SNS-specific=${classification.isSNSSpecific} (confidence: ${classification.confidence.toFixed(2)})`);
+  console.log(`   Reason: ${classification.reason}`);
+  
+  // Step 2: Check if this requires strict KB lookup (procedures, pricing, etc.)
+  const isStrictQuestion = requiresStrictAnswer(userMessage);
+  
+  // Step 3: Try knowledge base lookup for SNS questions
+  let kbMatch = null;
+  if (classification.isSNSSpecific || isStrictQuestion) {
+    kbMatch = searchKnowledgeBase(userMessage);
+  }
+  
+  // Step 4: Decide response strategy
+  
+  // CASE 1: KB has a good match → Use it directly
+  if (kbMatch && kbMatch.score >= 0.7) {
+    console.log(`✅ Using knowledge base answer (score: ${kbMatch.score.toFixed(2)})`);
+    
+    // Add personality to KB answer based on trust level
+    const prefix = userMemory.trustLevel === 'trusted' 
+      ? '' 
+      : (userLanguage === 'zh' ? '我来帮你查了一下：\n\n' : 'Here\'s what I found:\n\n');
+    
+    return prefix + kbMatch.entry.answer;
+  }
+  
+  // CASE 2: SNS-specific but NO KB match → Say "I don't know" (CRITICAL)
+  if ((classification.isSNSSpecific || isStrictQuestion) && !kbMatch) {
+    console.log(`⚠️ SNS question but no KB match - refusing to improvise`);
+    logUnknownQuestion(userMessage, username);
+    
+    if (userLanguage === 'zh') {
+      return `抱歉，这个问题我不太确定 🤔 为了防止给你错误的信息，建议你：
+
+1. 查看官方文档: https://docs.sns.id
+2. 联系人工客服
+3. 或者稍等一下，我把这个问题记录下来，之后会更新知识库`;
+    } else {
+      return `I'm not sure about that specific question 🤔 To avoid giving you incorrect information, I'd recommend:
+
+1. Check the official docs: https://docs.sns.id
+2. Contact human support
+3. I've logged this question and will update my knowledge base soon`;
+    }
+  }
+  
+  // CASE 3: Not SNS-specific → Let AI answer freely
+  console.log(`🤖 Non-SNS question - using AI generation`);
+  return generateAIFallbackResponse(userMessage, username, userMemory, userLanguage, isDirectMention);
+}
+
+/**
+ * AI fallback for non-SNS questions
+ */
+async function generateAIFallbackResponse(
+  userMessage: string,
+  username: string,
+  userMemory: UserMemory,
+  userLanguage: 'zh' | 'en',
+  isDirectMention: boolean
+): Promise<string | null> {
+  
   const systemPrompt = buildSystemPrompt(userLanguage);
   const userContext = buildUserContext(userMemory);
+  
+  // Add constraint: Don't pretend to know SNS specifics
+  const safetyPrompt = `\n\nSAFETY RULE: If the user asks about SNS/sol.site specifics and you're not 100% sure, 
+say you don't know rather than guessing. For general crypto/Web3 questions, you can answer freely.`;
   
   const messages = [
     {
       role: 'system' as const,
-      content: `${systemPrompt}\n\n${userContext}`
+      content: `${systemPrompt}${safetyPrompt}\n\n${userContext}`
     },
     {
       role: 'user' as const,
@@ -299,7 +372,9 @@ async function generateSoulfulResponse(
     
     // Fallback responses based on context
     if (isDirectMention) {
-      return `👋 Hey ${username}! 我收到了，但有点卡壳 😅 稍后再聊？`;
+      return userLanguage === 'zh' 
+        ? `👋 Hey ${username}! 我收到了，但有点卡壳 😅 稍后再聊？`
+        : `👋 Hey ${username}! I got your message but I'm having a hiccup 😅 Try again later?`;
     }
     return null;
   }
