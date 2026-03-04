@@ -299,5 +299,12 @@
     "keywords": ["email", "mail", "receive", "inbox", "address", "mx"],
     "answer": "Yes! You can create `anything@yourname.sol.site` email addresses to receive emails. Set up MX records (up to 4 supported) and TXT records for SPF/verification in your DNS settings.",
     "confidence": 1.0
+  },
+  {
+    "id": "sol-site-complete-setup-flow",
+    "question": "What is the complete sol.site configuration process?",
+    "keywords": ["setup", "configure", "process", "flow", "steps", "complete", "guide", "how to setup", "configuration"],
+    "answer": "**Complete sol.site Configuration Flow:**\n\n**Step 1: Acquire .sol Domain**\n• Purchase via https://www.sns.id\n• Format: example.sol\n• Price: Based on character length (3-4 chars premium, 5+ standard)\n\n**Step 2: Select Hosting Provider**\nGet DNS records from your hosting platform:\n\n| Platform | Use Case | How to Get Records |\n|----------|----------|-------------------|\n| Vercel | React/Next.js apps | Dashboard → Domains → Enter sol.site → Copy records |\n| GitHub Pages | Static sites | Settings → Pages → Custom domain → Get A/AAAA records |\n| AWS + CloudFront | Enterprise | Route 53 or CloudFront CNAME |\n| Cloudflare Pages | Edge deployment | Dashboard → Custom domains → Get records (coming in 8 weeks) |\n\n**PSL Note:** sol.site is on the Public Suffix List. All major platforms should support it. If not, contact platform support—it's their PSL sync issue, not sol.site.\n\n**Step 3: SNS DNS Configuration**\nPath: SNS Platform → Domain profile → sol.site section → Configure Records\n\nSupported Records:\n• CNAME: 1 record (points to CDN/hosting)\n• A Records: Up to 3 (IPv4)\n• AAAA Records: Up to 3 (IPv6)\n• MX Records: Up to 4 (email)\n• TXT Records: Up to 5 (verification, SPF)\n\n**Step 4: DNS Propagation**\n• Typical time: 5 minutes to 24 hours\n• Depends on DNS TTL and caching\n• Check with dig or online propagation tools\n\n**Step 5: Access Verification**\n• Browser: https://example.sol.site\n• HTTPS certificate auto-issued via Let's Encrypt",
+    "confidence": 1.0
   }
 ]
