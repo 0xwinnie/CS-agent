@@ -37,20 +37,32 @@ function executeNLM(command: string): string | null {
  */
 export async function queryNotebookLM(question: string): Promise<NotebookLMResult | null> {
   console.log(`📓 Querying NotebookLM: "${question.substring(0, 50)}..."`);
-  
+
   const result = executeNLM(`notebook query ${NOTEBOOK_ALIAS} "${question.replace(/"/g, '\\"')}"`);
-  
+
   if (!result) {
     console.log('⚠️ NotebookLM query returned no result');
     return null;
   }
-  
-  // Parse the response (NotebookLM returns plain text answer)
-  return {
-    answer: result,
-    sources: ['docs.sns.id'],
-    confidence: 0.85 // NotebookLM generally provides good answers
-  };
+
+  try {
+    // NotebookLM returns JSON with response field
+    const parsed = JSON.parse(result);
+    const answer = parsed.response || parsed.text || result;
+
+    return {
+      answer: answer.replace(/\{[^}]+\}/g, '').trim(), // Remove any JSON artifacts
+      sources: ['docs.sns.id'],
+      confidence: 0.85
+    };
+  } catch {
+    // If not JSON, use as plain text
+    return {
+      answer: result,
+      sources: ['docs.sns.id'],
+      confidence: 0.85
+    };
+  }
 }
 
 /**
