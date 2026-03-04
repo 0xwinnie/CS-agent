@@ -7,6 +7,7 @@ import { Message, Client, TextChannel, DMChannel } from 'discord.js';
 import { config } from '../config/env';
 import { searchKnowledgeBase, logUnknownQuestion } from '../services/knowledgeBase';
 import { classifySNSQuestion, requiresStrictAnswer } from '../services/snsClassifier';
+import { queryNotebookLM, isNotebookLMAvailable } from '../services/notebookLMService';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -264,29 +265,50 @@ async function generateSoulfulResponse(
   // Step 2: Check if this requires strict KB lookup (procedures, pricing, etc.)
   const isStrictQuestion = requiresStrictAnswer(userMessage);
   
-  // Step 3: Try knowledge base lookup for SNS questions
-  let kbMatch = null;
+  // Step 3: Priority query strategy for SNS questions
+  // Priority: NotebookLM → Local KB → "I don't know"
+  
+  let answer: string | null = null;
+  let answerSource: 'notebooklm' | 'local_kb' | null = null;
+  
   if (classification.isSNSSpecific || isStrictQuestion) {
-    kbMatch = searchKnowledgeBase(userMessage);
-  }
-  
-  // Step 4: Decide response strategy
-  
-  // CASE 1: KB has a good match → Use it directly
-  if (kbMatch && kbMatch.score >= 0.7) {
-    console.log(`✅ Using knowledge base answer (score: ${kbMatch.score.toFixed(2)})`);
+    // Try NotebookLM first (highest quality, auto-synced with docs)
+    if (isNotebookLMAvailable()) {
+      console.log('🔍 Querying NotebookLM...');
+      const notebookResult = await queryNotebookLM(userMessage);
+      if (notebookResult && notebookResult.confidence >= 0.7) {
+        answer = notebookResult.answer;
+        answerSource = 'notebooklm';
+        console.log('✅ Answer from NotebookLM');
+      }
+    }
     
-    // Add personality to KB answer based on trust level
-    const prefix = userMemory.trustLevel === 'trusted' 
-      ? '' 
-      : (userLanguage === 'zh' ? '我来帮你查了一下：\n\n' : 'Here\'s what I found:\n\n');
+    // Fallback to local KB if NotebookLM fails
+    if (!answer) {
+      console.log('🔍 Querying local knowledge base...');
+      const kbMatch = searchKnowledgeBase(userMessage);
+      if (kbMatch && kbMatch.score >= 0.7) {
+        answer = kbMatch.entry.answer;
+        answerSource = 'local_kb';
+        console.log(`✅ Answer from local KB (score: ${kbMatch.score.toFixed(2)})`);
+      }
+    }
     
-    return prefix + kbMatch.entry.answer;
-  }
-  
-  // CASE 2: SNS-specific but NO KB match → Say "I don't know" (CRITICAL)
-  if ((classification.isSNSSpecific || isStrictQuestion) && !kbMatch) {
-    console.log(`⚠️ SNS question but no KB match - refusing to improvise`);
+    // CASE 1: Got answer from knowledge source
+    if (answer && answerSource) {
+      const sourceTag = answerSource === 'notebooklm' 
+        ? (userLanguage === 'zh' ? '\n\n📚 来源: docs.sns.id' : '\n\n📚 Source: docs.sns.id')
+        : '';
+      
+      const prefix = userMemory.trustLevel === 'trusted' || answerSource === 'notebooklm'
+        ? '' 
+        : (userLanguage === 'zh' ? '我来帮你查了一下：\n\n' : 'Here\'s what I found:\n\n');
+      
+      return prefix + answer + sourceTag;
+    }
+    
+    // CASE 2: SNS-specific but NO answer found → Say "I don't know" (CRITICAL)
+    console.log(`⚠️ SNS question but no answer found - refusing to improvise`);
     logUnknownQuestion(userMessage, username);
     
     if (userLanguage === 'zh') {
