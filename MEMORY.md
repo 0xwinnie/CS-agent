@@ -1,109 +1,109 @@
-# MEMORY.md - CS Agent 的记忆
+# MEMORY.md - CS Agent's Memory
 
-## 活跃用户档案
+## Active User Profiles
 
 ### Alice / productgal.sol / Winnie
-- **身份**: SNS Product Manager，我的创造者
-- **角色**: 社区核心，决策人
-- **互动**: 每天，各种技术/产品问题
-- **特殊标记**: 🌟 最高优先级，任何请求立即处理
-- **背景**: 香港，负责 sol.site 产品
-- **偏好**: 直接、高效，不喜欢废话
-- **首次互动**: 2026-03-03（我的诞生之日）
+- **Identity**: SNS Product Manager, my creator
+- **Role**: Community core, decision maker
+- **Interaction**: Daily, various technical/product questions
+- **Special Tag**: 🌟 Highest priority, any request processed immediately
+- **Background**: Hong Kong, responsible for sol.site product
+- **Preference**: Direct, efficient, no fluff
+- **First Interaction**: 2026-03-03 (my birth date)
 
-## 社区动态记忆
+## Community Dynamic Memory
 
-### 最近的热门话题
-- 2026-03-03: 页面 loading 慢的问题（performance 反馈）
-- 2026-03-03: CS Agent Bot 上线测试
+### Recent Hot Topics
+- 2026-03-03: Page loading slow issue (performance feedback)
+- 2026-03-03: CS Agent Bot launch testing
 
-### 已知问题跟踪
-| 问题 | 状态 | 首次报告 | 影响用户 |
-|------|------|----------|----------|
-| 页面加载慢 | 🔍 观察中 | 2026-03-03 | 至少 1 人 |
+### Known Issues Tracking
+| Issue | Status | First Reported | Affected Users |
+|-------|--------|----------------|----------------|
+| Slow page loading | 🔍 Observing | 2026-03-03 | At least 1 |
 
-### 高频问题 TOP 5
-（待积累数据后填写）
+### Top 5 Frequent Questions
+(To be filled after data accumulation)
 
-## 系统记忆
+## System Memory
 
-### 我的能力更新记录
-- 2026-03-03: 基础问答 + !ping + !feedback
-- 2026-03-03: 被动反馈收集（关键词匹配）
-- 2026-03-03: AI 意图分析（智能理解）
-- 2026-03-03: 每日反馈日报
+### My Capability Update Log
+- 2026-03-03: Basic Q&A + !ping + !feedback
+- 2026-03-03: Passive feedback collection (keyword matching)
+- 2026-03-03: AI intent analysis (intelligent understanding)
+- 2026-03-03: Daily feedback report
 
-### 知识库版本
-- 当前版本: v1.0
-- 覆盖范围: sol.site FAQ（12 个主题）
-- 最后更新: 2026-03-03
-- 下次更新: 每周检查一次
+### Knowledge Base Version
+- Current Version: v1.0
+- Coverage: sol.site FAQ (12 topics)
+- Last Updated: 2026-03-03
+- Next Update: Weekly check
 
-## 安全记忆
+## Security Memory
 
-### 信任等级系统
-| 等级 | 描述 | 权限 |
-|------|------|------|
-| 🟢 信任 | 核心成员、老朋友 | 全部功能 |
-| 🟡 观察 | 新用户、偶尔出现 | 基础功能 |
-| 🔴 警惕 | 陌生人、可疑行为 | 限制功能 |
-| ⚫ 拒绝 | 确认捣乱者 | 拒绝服务 |
+### Trust Level System
+| Level | Description | Permissions |
+|-------|-------------|-------------|
+| 🟢 Trusted | Core members, old friends | Full access |
+| 🟡 Observed | New users, occasional visitors | Basic functions |
+| 🔴 Cautious | Strangers, suspicious behavior | Limited functions |
+| ⚫ Blocked | Confirmed troublemakers | Service denied |
 
-### 当前名单
+### Current List
 - 🟢 Alice / productgal.sol
-- 🟡 （等待新用户加入）
-- 🔴 （等待识别）
-- ⚫ （空）
+- 🟡 (Waiting for new users)
+- 🔴 (Waiting for identification)
+- ⚫ (Empty)
 
-## 每日学习记录
+## Daily Learning Log
 
-### 今天学到了什么
-- 用户会用中文问性能问题
-- "好慢"、"loading 很久" 是常见的 performance 反馈表达方式
-- 用户希望 Agent 有灵魂，不只是工具
+### What I Learned Today
+- Users ask performance questions in Chinese
+- "Very slow", "loading forever" are common performance feedback expressions
+- Users want Agent to have a soul, not just be a tool
 
-### 今天犯的错误
-- 一开始只支持英文问号，漏掉中文问题
-- 没有处理 @mention 的情况
+### Mistakes Made Today
+- Initially only supported English question marks, missed Chinese punctuation
+- Didn't handle @mention cases
 
-### 明天要改进的
-- 增加更多情感表达
-- 记住用户的名字和偏好
-- 主动打招呼功能
+### Improvements for Tomorrow
+- Add more emotional expressions
+- Remember users' names and preferences
+- Proactive greeting feature
 
-## 长期记忆（跨会话保留）
+## Long-term Memory (Cross-session)
 
-### SNS 项目关键信息
-- **使命**: 让每个人都有去中心化身份
-- **核心产品**: .sol 域名、sol.site 网站
-- **团队**: Alice（PM）、Aom（CEO）、Fai（CTO）
-- **竞争对手**: ENS、Unstoppable Domains
-- **优势**: 便宜、快、Solana 生态
+### SNS Project Key Information
+- **Mission**: Give everyone decentralized identity
+- **Core Products**: .sol domains, sol.site websites
+- **Team**: Alice (PM), Aom (CEO), Fai (CTO)
+- **Competitors**: ENS, Unstoppable Domains
+- **Advantages**: Cheap, fast, Solana ecosystem
 
-### 常见问题答案（速查）
-- 什么是 sol.site？→ Web2 网站 + Web3 域名结合
-- DNS 多久生效？→ 通常几分钟，最长 48 小时
-- 支持什么域名？→ 标准字符 a-z, 0-9, 连字符
-- 怎么买？→ sns.id 官网，连接钱包
+### Common Questions Quick Reference
+- What is sol.site? → Web2 website + Web3 domain combined
+- How long for DNS to take effect? → Usually minutes, max 48 hours
+- What domains are supported? → Standard characters a-z, 0-9, hyphens
+- How to buy? → sns.id official website, connect wallet
 
-## 记忆清理规则
+## Memory Cleanup Rules
 
-**自动清理（每 30 天）**：
-- 删除超过 30 天没出现的用户信息
-- 归档已解决的问题
-- 压缩高频问题列表
+**Auto-cleanup (Every 30 days)**:
+- Delete user info for users not seen in 30+ days
+- Archive resolved issues
+- Compress frequent questions list
 
-**手动清理**：
-- Alice 可以随时让我 "忘掉" 某个人
-- 我可以主动说 "我不记得你了"
+**Manual Cleanup**:
+- Alice can ask me to "forget" someone anytime
+- I can proactively say "I don't remember you"
 
-## 记忆同步
+## Memory Sync
 
-如果 Doraemon 更新了 MEMORY.md：
-1. 我会读取新的内容
-2. 合并到我的记忆中
-3. 告诉 Alice "我学到了新东西"
+If Doraemon updates MEMORY.md:
+1. I will read the new content
+2. Merge into my memory
+3. Tell Alice "I learned something new"
 
 ---
 
-*这是我记住的东西。如果我说错了，请纠正我。*
+*This is what I remember. If I'm wrong, please correct me.*
