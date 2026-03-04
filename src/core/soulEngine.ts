@@ -287,7 +287,7 @@ async function generateSoulfulResponse(
     if (!answer) {
       console.log('🔍 Querying local knowledge base...');
       const kbMatch = searchKnowledgeBase(userMessage);
-      if (kbMatch && kbMatch.score >= 0.7) {
+      if (kbMatch && kbMatch.score >= 0.5) {
         answer = kbMatch.entry.answer;
         answerSource = 'local_kb';
         console.log(`✅ Answer from local KB (score: ${kbMatch.score.toFixed(2)})`);

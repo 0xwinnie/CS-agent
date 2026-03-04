@@ -11,7 +11,7 @@ const KB_PATH = path.resolve(__dirname, '../../data/knowledge-base.json');
 const UNKNOWN_QUESTIONS_PATH = path.resolve(__dirname, '../../data/unknown-questions.json');
 
 // Confidence threshold for auto-replies
-const CONFIDENCE_THRESHOLD = 0.7;
+const CONFIDENCE_THRESHOLD = 0.5;
 
 /**
  * Knowledge base entry interface
@@ -66,9 +66,20 @@ function calculateSimilarity(query: string, entry: KnowledgeBaseEntry): number {
   }
 
   // Check for partial question match
-  if (entry.question.toLowerCase().includes(queryLower) || 
-      queryLower.includes(entry.question.toLowerCase())) {
-    score += 0.8;
+  const questionLower = entry.question.toLowerCase();
+  if (questionLower.includes(queryLower) || queryLower.includes(questionLower)) {
+    score += 0.9;
+  }
+  
+  // Check for significant word overlap (3+ words)
+  const questionWords = questionLower.split(/\s+/);
+  const overlappingWords = questionWords.filter(w => 
+    w.length > 2 && queryLower.includes(w)
+  );
+  if (overlappingWords.length >= 3) {
+    score += 0.6;
+  } else if (overlappingWords.length >= 2) {
+    score += 0.3;
   }
 
   // Keyword matching
