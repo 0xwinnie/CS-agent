@@ -16,7 +16,7 @@ const CONFIDENCE_THRESHOLD = 0.5;
 /**
  * Knowledge base entry interface
  */
-interface KnowledgeBaseEntry {
+export interface KnowledgeBaseEntry {
   id: string;
   question: string;
   keywords: string[];

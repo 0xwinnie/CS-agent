@@ -8,6 +8,8 @@ import { config } from '../config/env';
 import { searchKnowledgeBase, logUnknownQuestion } from '../services/knowledgeBase';
 import { classifySNSQuestion, requiresStrictAnswer } from '../services/snsClassifier';
 import { queryNotebookLM, isNotebookLMAvailable } from '../services/notebookLMService';
+import { generateRAGAnswer, quickSemanticMatch } from '../services/ragService';
+import { hasEmbeddings } from '../services/semanticKB';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -265,52 +267,63 @@ async function generateSoulfulResponse(
   // Step 2: Check if this requires strict KB lookup (procedures, pricing, etc.)
   const isStrictQuestion = requiresStrictAnswer(userMessage);
   
-  // Step 3: Priority query strategy for SNS questions
-  // Priority: Local KB (fast) → NotebookLM (slow but comprehensive) → "I don't know"
-  // Reason: Discord requires <3s response, NotebookLM can take 10-30s
-  
-  let answer: string | null = null;
-  let answerSource: 'notebooklm' | 'local_kb' | null = null;
+  // Step 3: AI-powered RAG strategy for SNS questions
+  // RAG: Retrieve relevant FAQs → AI generates answer based on context
   
   if (classification.isSNSSpecific || isStrictQuestion) {
-    // Try local KB FIRST (fast, <100ms)
-    console.log('🔍 Querying local knowledge base...');
-    const kbMatch = searchKnowledgeBase(userMessage);
-    if (kbMatch && kbMatch.score >= 0.5) {
-      answer = kbMatch.entry.answer;
-      answerSource = 'local_kb';
-      console.log(`✅ Answer from local KB (score: ${kbMatch.score.toFixed(2)})`);
+    let answer: string | null = null;
+    let answerSource = '';
+    
+    // Try RAG if embeddings exist
+    if (hasEmbeddings()) {
+      console.log('🧠 Using RAG (Retrieval-Augmented Generation)...');
+      const ragResult = await generateRAGAnswer(userMessage, userLanguage);
+      
+      if (ragResult && ragResult.confidence >= 0.6) {
+        answer = ragResult.answer;
+        answerSource = '📚 基于知识库';
+        console.log(`✅ RAG answer generated (confidence: ${ragResult.confidence.toFixed(2)})`);
+      }
     }
     
-    // If local KB fails, try NotebookLM as fallback (slower but more comprehensive)
+    // Fallback to keyword-based search if RAG fails
+    if (!answer) {
+      console.log('🔍 RAG failed, trying keyword search...');
+      const kbMatch = searchKnowledgeBase(userMessage);
+      if (kbMatch && kbMatch.score >= 0.5) {
+        answer = kbMatch.entry.answer;
+        answerSource = userLanguage === 'zh' ? '📚 来自知识库' : '📚 From knowledge base';
+        console.log(`✅ Keyword match (score: ${kbMatch.score.toFixed(2)})`);
+      }
+    }
+    
+    // Final fallback: NotebookLM
     if (!answer && isNotebookLMAvailable()) {
-      console.log('🔍 Querying NotebookLM (local KB no match)...');
+      console.log('🔍 Querying NotebookLM...');
       try {
         const notebookResult = await queryNotebookLM(userMessage);
         if (notebookResult && notebookResult.confidence >= 0.7) {
           answer = notebookResult.answer;
-          answerSource = 'notebooklm';
+          answerSource = '📚 来自官方文档';
           console.log('✅ Answer from NotebookLM');
         }
       } catch (error) {
-        console.log('⚠️ NotebookLM query failed or timed out');
+        console.log('⚠️ NotebookLM query failed');
       }
     }
     
-    // CASE 1: Got answer from knowledge source
-    if (answer && answerSource) {
-      const sourceTag = answerSource === 'notebooklm' 
-        ? (userLanguage === 'zh' ? '\n\n📚 来源: docs.sns.id' : '\n\n📚 Source: docs.sns.id')
-        : '';
+    // CASE 1: Got answer
+    if (answer) {
+      // Add source tag for non-trusted users
+      const shouldAddSource = userMemory.trustLevel !== 'trusted' && answerSource;
+      const finalAnswer = shouldAddSource 
+        ? `${answer}\n\n${answerSource}`
+        : answer;
       
-      const prefix = userMemory.trustLevel === 'trusted' || answerSource === 'notebooklm'
-        ? '' 
-        : (userLanguage === 'zh' ? '我来帮你查了一下：\n\n' : 'Here\'s what I found:\n\n');
-      
-      return prefix + answer + sourceTag;
+      return finalAnswer;
     }
     
-    // CASE 2: SNS-specific but NO answer found → Say "I don't know" (CRITICAL)
+    // CASE 2: No answer found → Say "I don't know"
     console.log(`⚠️ SNS question but no answer found - refusing to improvise`);
     logUnknownQuestion(userMessage, username);
     
