@@ -266,31 +266,34 @@ async function generateSoulfulResponse(
   const isStrictQuestion = requiresStrictAnswer(userMessage);
   
   // Step 3: Priority query strategy for SNS questions
-  // Priority: NotebookLM → Local KB → "I don't know"
+  // Priority: Local KB (fast) → NotebookLM (slow but comprehensive) → "I don't know"
+  // Reason: Discord requires <3s response, NotebookLM can take 10-30s
   
   let answer: string | null = null;
   let answerSource: 'notebooklm' | 'local_kb' | null = null;
   
   if (classification.isSNSSpecific || isStrictQuestion) {
-    // Try NotebookLM first (highest quality, auto-synced with docs)
-    if (isNotebookLMAvailable()) {
-      console.log('🔍 Querying NotebookLM...');
-      const notebookResult = await queryNotebookLM(userMessage);
-      if (notebookResult && notebookResult.confidence >= 0.7) {
-        answer = notebookResult.answer;
-        answerSource = 'notebooklm';
-        console.log('✅ Answer from NotebookLM');
-      }
+    // Try local KB FIRST (fast, <100ms)
+    console.log('🔍 Querying local knowledge base...');
+    const kbMatch = searchKnowledgeBase(userMessage);
+    if (kbMatch && kbMatch.score >= 0.5) {
+      answer = kbMatch.entry.answer;
+      answerSource = 'local_kb';
+      console.log(`✅ Answer from local KB (score: ${kbMatch.score.toFixed(2)})`);
     }
     
-    // Fallback to local KB if NotebookLM fails
-    if (!answer) {
-      console.log('🔍 Querying local knowledge base...');
-      const kbMatch = searchKnowledgeBase(userMessage);
-      if (kbMatch && kbMatch.score >= 0.5) {
-        answer = kbMatch.entry.answer;
-        answerSource = 'local_kb';
-        console.log(`✅ Answer from local KB (score: ${kbMatch.score.toFixed(2)})`);
+    // If local KB fails, try NotebookLM as fallback (slower but more comprehensive)
+    if (!answer && isNotebookLMAvailable()) {
+      console.log('🔍 Querying NotebookLM (local KB no match)...');
+      try {
+        const notebookResult = await queryNotebookLM(userMessage);
+        if (notebookResult && notebookResult.confidence >= 0.7) {
+          answer = notebookResult.answer;
+          answerSource = 'notebooklm';
+          console.log('✅ Answer from NotebookLM');
+        }
+      } catch (error) {
+        console.log('⚠️ NotebookLM query failed or timed out');
       }
     }
     
