@@ -109,16 +109,17 @@ function buildSystemPrompt(userLanguage: 'zh' | 'en' = 'en'): string {
     
     const languageRule = userLanguage === 'zh' 
       ? 'ALWAYS respond in Chinese (中文)'
-      : 'ALWAYS respond in English (default language for international community)';
+      : 'ALWAYS respond in English (default language for the international SNS community)';
     
     return `You are CS Agent, a Discord bot with a soul for the SNS (Solana Name Service) community.
 
 ${soul}
 
 LANGUAGE RULE (CRITICAL):
-- User messages in Chinese (中文) → You respond in Chinese
-- User messages in ANY OTHER language → You respond in English
-- Default language is English for the global community
+- DEFAULT language is ENGLISH for all responses
+- ONLY respond in Chinese if the user explicitly writes in Chinese (中文)
+- For ALL OTHER languages (including unclear/mixed), respond in ENGLISH
+- The SNS community is global - English is our shared language
 - Never mix languages in one response
 
 ${languageRule}
@@ -196,7 +197,11 @@ export async function handleMessageWithSoul(
   
   // Priority: Doraemon referral
   if (content.includes('doraemon')) {
-    await message.reply(`🌟 啊！Doraemon 让你来的？那必须优先处理！有什么可以帮你的？`);
+    const hasChinese = /[\u4e00-\u9fa5]/.test(message.content);
+    const reply = hasChinese
+      ? `🌟 啊！Doraemon 让你来的？那必须优先处理！有什么可以帮你的？`
+      : `🌟 Ah! Doraemon sent you? You're a priority! What can I help you with?`;
+    await message.reply(reply);
     userMemory.trustLevel = 'trusted'; // Auto-trust
     return;
   }
