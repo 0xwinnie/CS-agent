@@ -1,0 +1,30 @@
+{
+  "name": "cs-agent",
+  "version": "1.0.0",
+  "description": "Discord CS Agent Bot",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "watch": "nodemon --exec ts-node src/index.ts"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "cs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^14.18.0",
+    "dotenv": "^16.4.7",
+    "openai": "^6.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.13",
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

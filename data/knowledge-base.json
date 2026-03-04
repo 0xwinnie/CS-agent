@@ -1,0 +1,184 @@
+[
+  {
+    "id": "what-is-sol-site",
+    "question": "What is sol.site?",
+    "keywords": ["sol.site", "what is", "platform", "service", "about"],
+    "answer": "sol.site is a free website builder for .sol domain owners. It allows you to create a decentralized website without coding, hosting fees, or server setup. Your site pulls content from the blockchain and is censorship-resistant.",
+    "confidence": 1.0
+  },
+  {
+    "id": "setup-sol-site",
+    "question": "How do I set up my sol.site website?",
+    "keywords": ["set up", "setup", "sol.site", "website", "configure", "create site", "how to use", "getting started", "build"],
+    "answer": "To set up your sol.site (you need to own a .sol domain first):\n1. Visit https://sol.site and connect your wallet\n2. Select your .sol domain\n3. Choose a template or start from scratch\n4. Customize your content\n5. Publish - it's live instantly!\n\nNo coding or hosting needed. Your site is stored on-chain.",
+    "confidence": 1.0
+  },
+  {
+    "id": "what-is-sns",
+    "question": "What is SNS (Solana Name Service)?",
+    "keywords": ["sns", "solana name service", "what is", "about", "intro"],
+    "answer": "SNS (Solana Name Service) is a decentralized identity service on Solana that lets you own human-readable .sol domain names. These domains can represent wallet addresses, host websites, and serve as your Web3 identity.",
+    "confidence": 1.0
+  },
+  {
+    "id": "sol-site-vs-sns",
+    "question": "What's the difference between SNS and sol.site?",
+    "keywords": ["difference", "sns", "sol.site", "vs", "compare", "domain vs website"],
+    "answer": "SNS = buying the .sol domain name (like buying land).\nsol.site = building a website on that domain (like building a house on the land).\n\nStep 1: Register domain at https://www.sns.id (one-time purchase)\nStep 2: Build website at https://sol.site (free, after you own the domain)\n\nYou need a .sol domain BEFORE you can use sol.site.",
+    "confidence": 1.0
+  },
+  {
+    "id": "supported-wallets",
+    "question": "Which wallets are supported?",
+    "keywords": ["wallet", "phantom", "solflare", "backpack", "glow", "support"],
+    "answer": "Supported wallets: Phantom, Solflare, Backpack, Glow. Make sure your wallet is installed, unlocked, and set to Mainnet before connecting.",
+    "confidence": 1.0
+  },
+  {
+    "id": "dns-setup",
+    "question": "How to set up DNS records?",
+    "keywords": ["dns", "setup", "configure", "domain", "records", "how to", "a record", "cname", "txt"],
+    "answer": "To set up DNS:\n1. Go to Manage Domains and select your domain\n2. Click DNS Settings\n3. Add records (A, CNAME, TXT, MX)\n4. Save changes\n\nDNS changes take 5-30 minutes to propagate. TXT records for verification have a cooldown period.",
+    "confidence": 1.0
+  },
+  {
+    "id": "txt-record-cooldown",
+    "question": "Why can't I confirm my TXT record immediately?",
+    "keywords": ["txt", "cooldown", "confirm", "verify", "error", "try again"],
+    "answer": "TXT records have a cooldown period (usually 5-30 minutes) to prevent spam and allow DNS propagation. Wait a bit and try again. This is not an error - it's normal DNS behavior.",
+    "confidence": 1.0
+  },
+  {
+    "id": "mx-record",
+    "question": "How to set up email with MX records?",
+    "keywords": ["mx", "email", "mail", "record", "setup"],
+    "answer": "To set up email:\n1. Get MX records from your email provider\n2. Format: `10 mail.example.com` (priority + host)\n3. Add to DNS settings\n4. Wait up to 24 hours for propagation\n\nEnsure no conflicting MX records exist.",
+    "confidence": 1.0
+  },
+  {
+    "id": "domain-restrictions",
+    "question": "What characters can I use in a domain name?",
+    "keywords": ["restriction", "limit", "characters", "emoji", "allowed", "format"],
+    "answer": "Domain names must:\n- Be 3-32 characters long\n- Use only a-z, 0-9, hyphens\n- Start and end with alphanumeric\n\nEmoji, Chinese, Japanese, Korean (CJK) characters are NOT supported - this follows ICANN rules for DNS compatibility.",
+    "confidence": 1.0
+  },
+  {
+    "id": "emoji-cjk-support",
+    "question": "Does SNS support emoji or CJK characters?",
+    "keywords": ["emoji", "chinese", "japanese", "korean", "cjk", "unicode", "special characters"],
+    "answer": "No. Emoji and CJK characters are not supported and there will be no change. This follows ICANN rules for Web2 domain names - .sol domains use the same technical standards as traditional DNS, which only support ASCII characters (a-z, 0-9, hyphens).",
+    "confidence": 1.0
+  },
+  {
+    "id": "register-domain",
+    "question": "How do I register a .sol domain?",
+    "keywords": ["register", "buy", "purchase", "get", "domain", "how", "new domain"],
+    "answer": "To register a NEW .sol domain (ownership):\n1. Visit https://www.sns.id\n2. Search for your desired name\n3. Click Register if available\n4. Connect your Solana wallet\n5. Complete the SOL transaction\n\n3-4 char domains cost more. 5+ chars are standard price.\n\n📌 Note: This is buying the domain name. To build a website on it, use sol.site after registration.",
+    "confidence": 1.0
+  },
+  {
+    "id": "transfer-domain",
+    "question": "How to transfer/sell a domain?",
+    "keywords": ["transfer", "move", "sell", "give", "domain", "owner"],
+    "answer": "To transfer:\n1. Go to domain management\n2. Click Transfer\n3. Enter recipient's wallet address\n4. Confirm\n5. Recipient must accept within 7 days\n\n⚠️ Transfers are irreversible once confirmed! You can also sell on NFT markets like Magic Eden or Tensor.",
+    "confidence": 1.0
+  },
+  {
+    "id": "renew-domain",
+    "question": "How to renew my domain?",
+    "keywords": ["renew", "extend", "expiration", "expiry", "domain"],
+    "answer": "To renew:\n1. Visit your dashboard\n2. Find expiring domains\n3. Click Renew\n4. Choose 1-5 years\n5. Complete payment\n\n💡 Enable auto-renew to avoid expiration. Expired domains can be registered by anyone!",
+    "confidence": 1.0
+  },
+  {
+    "id": "wallet-connection",
+    "question": "Wallet won't connect - what to do?",
+    "keywords": ["wallet", "connect", "error", "not working", "login", "phantom"],
+    "answer": "Try these steps:\n1. Ensure wallet extension is installed and unlocked\n2. Refresh page and retry\n3. Confirm you're on Mainnet (not Devnet)\n4. Clear browser cache/cookies\n5. Try a different browser\n\nSupported: Phantom, Solflare, Backpack, Glow",
+    "confidence": 1.0
+  },
+  {
+    "id": "pricing",
+    "question": "How much does a domain cost?",
+    "keywords": ["price", "cost", "fee", "how much", "pricing", "sol"],
+    "answer": "Pricing:\n- 3-4 chars: Premium (~$100-1000+ in SOL)\n- 5+ chars: Standard (~$20-50 in SOL)\n- Renewals vary by length\n\nPrices are paid in SOL and fluctuate with market rates. Check current prices at https://www.sns.id",
+    "confidence": 1.0
+  },
+  {
+    "id": "subdomains",
+    "question": "Can I create subdomains?",
+    "keywords": ["subdomain", "sub", "child", "create", "add"],
+    "answer": "Yes! Create subdomains like blog.yourname.sol:\n1. Go to domain management\n2. Click Subdomains\n3. Enter name (e.g., 'blog')\n4. Set destination\n5. Confirm transaction\n\nGreat for organizing different services or projects.",
+    "confidence": 1.0
+  },
+  {
+    "id": "ipfs",
+    "question": "How to link my domain to IPFS?",
+    "keywords": ["ipfs", "content", "hosting", "decentralized", "website", "pinata", "fleek"],
+    "answer": "To link to IPFS:\n1. Upload site to IPFS (Pinata, Fleek, etc.)\n2. Get the CID\n3. Add TXT record: `_dnslink.yourname.sol` with value `dnslink=/ipfs/YOUR_CID`\n4. Add CNAME to IPFS gateway\n\nYour decentralized site will be live at your .sol domain!",
+    "confidence": 1.0
+  },
+  {
+    "id": "refund",
+    "question": "Can I get a refund?",
+    "keywords": ["refund", "money back", "cancel", "return", "payment"],
+    "answer": "No refunds - blockchain transactions are final. Please double-check your domain name, spelling, and price before purchasing. For double-charges or technical issues, contact support with your transaction signature.",
+    "confidence": 1.0
+  },
+  {
+    "id": "sns-v1-vs-v2",
+    "question": "What's the difference between SNS V1 and V2?",
+    "keywords": ["v1", "v2", "version", "difference", "migrate"],
+    "answer": "SNS V2 is the current version with better features and lower fees. V1 domains still work and can be managed, but new registrations use V2. To migrate V1 to V2, contact support. New users should only use V2.",
+    "confidence": 1.0
+  },
+  {
+    "id": "marketplace",
+    "question": "Where can I buy/sell .sol domains?",
+    "keywords": ["marketplace", "buy", "sell", "trade", "magic eden", "tensor", "nft"],
+    "answer": "Trade .sol domains on NFT marketplaces:\n- Magic Eden\n- Tensor\n- Hyperspace\n\n.sol domains are SPL NFTs, so they work on any Solana NFT marketplace. Check rarity, volume, and floor prices before trading.",
+    "confidence": 1.0
+  },
+  {
+    "id": "scam-warning",
+    "question": "Is this a scam / fake admin?",
+    "keywords": ["scam", "fake", "admin", "dm", "message", "suspicious"],
+    "answer": "⚠️ SCAM WARNING:\nReal SNS admins NEVER:\n- DM you first\n- Ask for funds\n- Ask to validate your wallet\n- Send suspicious links\n\nAlways verify through official channels: https://discord.sns.id or https://www.sns.id",
+    "confidence": 1.0
+  },
+  {
+    "id": "transaction-failed",
+    "question": "My transaction failed - what happened?",
+    "keywords": ["transaction", "failed", "error", "stuck", "pending"],
+    "answer": "Common causes:\n1. Insufficient SOL for gas\n2. Network congestion - retry with higher priority fee\n3. Wallet not connected properly\n4. Domain already registered\n\nCheck your wallet balance and retry. If SOL was deducted but domain not received, contact support with tx signature.",
+    "confidence": 1.0
+  },
+  {
+    "id": "domain-not-showing",
+    "question": "I bought a domain but it's not showing in my wallet",
+    "keywords": ["not showing", "missing", "wallet", "bought", "purchased"],
+    "answer": "Steps:\n1. Check transaction on explorer.solana.com - did it succeed?\n2. Make sure wallet is on Mainnet\n3. Refresh the page\n4. Check 'Collectibles' or 'NFTs' tab in your wallet\n\n.sol domains are NFTs and should appear in your wallet's NFT section.",
+    "confidence": 1.0
+  },
+  {
+    "id": "referral-program",
+    "question": "How does the referral program work?",
+    "keywords": ["referral", "refer", "earn", "affiliate", "invite"],
+    "answer": "Refer friends and earn rewards:\n1. Get your referral link from the Refer & Earn page\n2. Share with friends\n3. Earn when they register domains\n\nCheck current reward rates on https://www.sns.id/referral",
+    "confidence": 1.0
+  },
+  {
+    "id": "sns-token",
+    "question": "What is the $SNS token?",
+    "keywords": ["sns token", "$sns", "governance", "tokenomics", "utility"],
+    "answer": "$SNS is the governance token for the Solana Name Service. Holders can vote on protocol decisions and participate in ecosystem incentives. Check tokenomics and distribution at https://www.sns.id/token",
+    "confidence": 1.0
+  },
+  {
+    "id": "official-links",
+    "question": "What are the official SNS links?",
+    "keywords": ["official", "link", "website", "discord", "twitter", "telegram"],
+    "answer": "Official links:\n- Website: https://www.sns.id\n- Discord: https://discord.sns.id\n- Twitter: https://x.com/sns\n- Telegram: https://t.me/snsdotsol\n- Docs: https://docs.sns.id\n- GitHub: https://github.com/SolanaNameService\n\n⚠️ Beware of fake accounts and phishing links!",
+    "confidence": 1.0
+  }
+]
