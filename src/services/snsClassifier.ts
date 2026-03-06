@@ -23,10 +23,18 @@ const SNS_KEYWORDS = [
   'phantom', 'solflare', 'backpack', 'wallet connect',
   'magic eden', 'tensor', 'nft marketplace', 'nft trade',
   
+  // Community & Partnership
+  'partnership', 'collaboration', 'integrate', 'integration',
+  'developer', 'dev', 'api', 'sdk', 'build on sns',
+  'community', 'ambassador', 'contribute', 'join team',
+  'marketing', 'promote', 'sponsor', 'event',
+  
   // Chinese keywords
   '域名', '注册', '购买域名', '续费', '转让', '出售',
   '子域名', '解析', '记录', '网站', '建站', '模板',
   '钱包', '连接', '交易', '交易失败', '找不到',
+  '合作', '开发', '开发者', '集成', '接入', 'API',
+  '社区', '大使', '推广', '赞助', '活动',
   
   // Issues specific to SNS
   'domain not showing', 'not in wallet', 'missing domain',
@@ -101,6 +109,14 @@ export function classifySNSQuestion(message: string): {
   }
   
   return { isSNSSpecific, confidence, reason };
+}
+
+/**
+ * Detect language of message
+ */
+export function detectLanguage(message: string): 'zh' | 'en' {
+  const chineseChars = /[\u4e00-\u9fff]/.test(message);
+  return chineseChars ? 'zh' : 'en';
 }
 
 /**

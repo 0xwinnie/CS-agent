@@ -31,10 +31,23 @@ export const config = {
   chatModel: process.env.CHAT_MODEL || 'openrouter/moonshot/kimi-k2.5',
   embeddingModel: process.env.EMBEDDING_MODEL || 'text-embedding-3-small',
   aiProvider: process.env.AI_PROVIDER || 'openrouter', // 'openrouter' | 'openai'
+  
+  /** Model fallback chain: gemini -> auto -> kimi (CS Agent prioritizes stability) */
+  modelFallbackChain: [
+    'google/gemini-2.5-flash',
+    'openrouter/openrouter/auto',
+    'moonshot/kimi-k2.5'
+  ],
 
   /** Feature flags */
   autoReplyEnabled: process.env.AUTO_REPLY_ENABLED === 'true',
-  feedbackEnabled: process.env.FEEDBACK_ENABLED === 'true' || process.env.FEEDBACK_COLLECTION_ENABLED === 'true'
+  feedbackEnabled: process.env.FEEDBACK_ENABLED === 'true' || process.env.FEEDBACK_COLLECTION_ENABLED === 'true',
+
+  /** Admin users who can teach the bot */
+  adminUserIds: (process.env.ADMIN_USER_IDS || '').split(',').filter(id => id.trim()),
+  
+  /** Auto-learning from admin corrections */
+  adminLearningEnabled: process.env.ADMIN_LEARNING_ENABLED !== 'false' // default true
 };
 
 /**

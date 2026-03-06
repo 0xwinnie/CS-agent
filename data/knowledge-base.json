@@ -1,345 +1,733 @@
 [
   {
+    "id": "wix-community-topics",
+    "question": "Where can I find WIX community topics and discussions?",
+    "keywords": [
+      "wix",
+      "community",
+      "topics",
+      "discussion",
+      "forum",
+      "help",
+      "support",
+      "find"
+    ],
+    "answer": "For WIX community support and discussions, visit the official WIX Community Forum at: https://community.wix.com/en (scroll down to see all topic categories). You can find topics by browsing categories or using the search function.",
+    "confidence": 1,
+    "source": "user_feedback",
+    "createdAt": "2026-03-06"
+  },
+  {
     "id": "what-is-sol-site",
     "question": "What is sol.site?",
-    "keywords": ["sol.site", "what is", "platform", "service", "about"],
+    "keywords": [
+      "sol.site",
+      "what is",
+      "platform",
+      "service",
+      "about"
+    ],
     "answer": "sol.site is a free website builder for .sol domain owners. It allows you to create a decentralized website without coding, hosting fees, or server setup. Your site pulls content from the blockchain and is censorship-resistant.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "setup-sol-site",
     "question": "How do I set up my sol.site website?",
-    "keywords": ["set up", "setup", "sol.site", "website", "configure", "create site", "how to use", "getting started", "build"],
-    "answer": "To set up your sol.site (you need to own a .sol domain first):\n1. Visit https://sol.site and connect your wallet\n2. Select your .sol domain\n3. Choose a template or start from scratch\n4. Customize your content\n5. Publish - it's live instantly!\n\nNo coding or hosting needed. Your site is stored on-chain.",
-    "confidence": 1.0
+    "keywords": [
+      "set up",
+      "setup",
+      "sol.site",
+      "website",
+      "configure",
+      "create site",
+      "how to use",
+      "getting started",
+      "build",
+      "configuration"
+    ],
+    "answer": "**Complete sol.site Configuration Flow:**\n\n**Step 1: Acquire .sol Domain**\n• Purchase via SNS platform\n• Format: example.sol\n• Price: Based on character length (3-4 chars premium, 5+ standard)\n\n**Step 2: Select Hosting Provider**\nGet DNS records from your hosting platform:\n\n| Platform | Use Case | How to Get Records |\n|----------|----------|-------------------|\n| Vercel | React/Next.js apps | Dashboard → Domains → Enter sol.site → Copy records |\n| GitHub Pages | Static sites | Settings → Pages → Custom domain → Get A/AAAA records |\n| AWS + CloudFront | Enterprise | Route 53 or CloudFront CNAME |\n| Cloudflare Pages | Edge deployment | Dashboard → Custom domains → Get records |\n\n**Step 3: SNS DNS Configuration**\nPath: SNS Platform → Domain profile → sol.site section → Configure Records\n\nSupported Records:\n• CNAME: 1 record (points to CDN/hosting)\n• A Records: Up to 3 (IPv4)\n• AAAA Records: Up to 3 (IPv6)\n• MX Records: Up to 4 (email)\n• TXT Records: Up to 5 (verification, SPF)\n\n**Step 4: DNS Propagation**\n• Typical time: 5 minutes to 24 hours\n• Depends on DNS TTL and caching\n\n**Step 5: Access Verification**\n• Browser: example.sol.site\n• HTTPS certificate auto-issued via Let's Encrypt",
+    "confidence": 1
   },
   {
     "id": "what-is-sns",
     "question": "What is SNS (Solana Name Service)?",
-    "keywords": ["sns", "solana name service", "what is", "about", "intro"],
+    "keywords": [
+      "sns",
+      "solana name service",
+      "what is",
+      "about",
+      "intro"
+    ],
     "answer": "SNS (Solana Name Service) is a decentralized identity service on Solana that lets you own human-readable .sol domain names. These domains can represent wallet addresses, host websites, and serve as your Web3 identity.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-vs-sns",
     "question": "What's the difference between SNS and sol.site?",
-    "keywords": ["difference", "sns", "sol.site", "vs", "compare", "domain vs website"],
+    "keywords": [
+      "difference",
+      "sns",
+      "sol.site",
+      "vs",
+      "compare",
+      "domain vs website"
+    ],
     "answer": "SNS = buying the .sol domain name (like buying land).\nsol.site = building a website on that domain (like building a house on the land).\n\nStep 1: Register domain at https://www.sns.id (one-time purchase)\nStep 2: Build website at https://sol.site (free, after you own the domain)\n\nYou need a .sol domain BEFORE you can use sol.site.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "supported-wallets",
     "question": "Which wallets are supported?",
-    "keywords": ["wallet", "phantom", "solflare", "backpack", "glow", "support"],
+    "keywords": [
+      "wallet",
+      "phantom",
+      "solflare",
+      "backpack",
+      "glow",
+      "support"
+    ],
     "answer": "Supported wallets: Phantom, Solflare, Backpack, Glow. Make sure your wallet is installed, unlocked, and set to Mainnet before connecting.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "dns-setup",
     "question": "How to set up DNS records?",
-    "keywords": ["dns", "setup", "configure", "domain", "records", "how to", "a record", "cname", "txt"],
+    "keywords": [
+      "dns",
+      "setup",
+      "configure",
+      "domain",
+      "records",
+      "how to",
+      "a record",
+      "cname",
+      "txt"
+    ],
     "answer": "To set up DNS:\n1. Go to Manage Domains and select your domain\n2. Click DNS Settings\n3. Add records (A, CNAME, TXT, MX)\n4. Save changes\n\nDNS changes take 5-30 minutes to propagate. TXT records for verification have a cooldown period.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "txt-record-cooldown",
     "question": "Why can't I confirm my TXT record immediately?",
-    "keywords": ["txt", "cooldown", "confirm", "verify", "error", "try again"],
+    "keywords": [
+      "txt",
+      "cooldown",
+      "confirm",
+      "verify",
+      "error",
+      "try again"
+    ],
     "answer": "TXT records have a cooldown period (usually 5-30 minutes) to prevent spam and allow DNS propagation. Wait a bit and try again. This is not an error - it's normal DNS behavior.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "mx-record",
     "question": "How to set up email with MX records?",
-    "keywords": ["mx", "email", "mail", "record", "setup"],
+    "keywords": [
+      "mx",
+      "email",
+      "mail",
+      "record",
+      "setup"
+    ],
     "answer": "To set up email:\n1. Get MX records from your email provider\n2. Format: `10 mail.example.com` (priority + host)\n3. Add to DNS settings\n4. Wait up to 24 hours for propagation\n\nEnsure no conflicting MX records exist.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "domain-restrictions",
     "question": "What characters can I use in a domain name?",
-    "keywords": ["restriction", "limit", "characters", "emoji", "allowed", "format"],
+    "keywords": [
+      "restriction",
+      "limit",
+      "characters",
+      "emoji",
+      "allowed",
+      "format"
+    ],
     "answer": "Domain names must:\n- Be 3-32 characters long\n- Use only a-z, 0-9, hyphens\n- Start and end with alphanumeric\n\nEmoji, Chinese, Japanese, Korean (CJK) characters are NOT supported - this follows ICANN rules for DNS compatibility.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "emoji-cjk-support",
     "question": "Does SNS support emoji or CJK characters?",
-    "keywords": ["emoji", "chinese", "japanese", "korean", "cjk", "unicode", "special characters"],
+    "keywords": [
+      "emoji",
+      "chinese",
+      "japanese",
+      "korean",
+      "cjk",
+      "unicode",
+      "special characters"
+    ],
     "answer": "No. Emoji and CJK characters are not supported and there will be no change. This follows ICANN rules for Web2 domain names - .sol domains use the same technical standards as traditional DNS, which only support ASCII characters (a-z, 0-9, hyphens).",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "register-domain",
     "question": "How do I register a .sol domain?",
-    "keywords": ["register", "buy", "purchase", "get", "domain", "how", "new domain"],
+    "keywords": [
+      "register",
+      "buy",
+      "purchase",
+      "get",
+      "domain",
+      "how",
+      "new domain"
+    ],
     "answer": "To register a NEW .sol domain (ownership):\n1. Visit https://www.sns.id\n2. Search for your desired name\n3. Click Register if available\n4. Connect your Solana wallet\n5. Complete the SOL transaction\n\n3-4 char domains cost more. 5+ chars are standard price.\n\n📌 Note: This is buying the domain name. To build a website on it, use sol.site after registration.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "transfer-domain",
     "question": "How to transfer/sell a domain?",
-    "keywords": ["transfer", "move", "sell", "give", "domain", "owner"],
+    "keywords": [
+      "transfer",
+      "move",
+      "sell",
+      "give",
+      "domain",
+      "owner"
+    ],
     "answer": "To transfer:\n1. Go to domain management\n2. Click Transfer\n3. Enter recipient's wallet address\n4. Confirm\n5. Recipient must accept within 7 days\n\n⚠️ Transfers are irreversible once confirmed! You can also sell on NFT markets like Magic Eden or Tensor.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "renew-domain",
     "question": "How to renew my domain?",
-    "keywords": ["renew", "extend", "expiration", "expiry", "domain"],
+    "keywords": [
+      "renew",
+      "extend",
+      "expiration",
+      "expiry",
+      "domain"
+    ],
     "answer": "To renew:\n1. Visit your dashboard\n2. Find expiring domains\n3. Click Renew\n4. Choose 1-5 years\n5. Complete payment\n\n💡 Enable auto-renew to avoid expiration. Expired domains can be registered by anyone!",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "wallet-connection",
     "question": "Wallet won't connect - what to do?",
-    "keywords": ["wallet", "connect", "error", "not working", "login", "phantom"],
+    "keywords": [
+      "wallet",
+      "connect",
+      "error",
+      "not working",
+      "login",
+      "phantom"
+    ],
     "answer": "Try these steps:\n1. Ensure wallet extension is installed and unlocked\n2. Refresh page and retry\n3. Confirm you're on Mainnet (not Devnet)\n4. Clear browser cache/cookies\n5. Try a different browser\n\nSupported: Phantom, Solflare, Backpack, Glow",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "pricing",
     "question": "How much does a domain cost?",
-    "keywords": ["price", "cost", "fee", "how much", "pricing", "sol"],
+    "keywords": [
+      "price",
+      "cost",
+      "fee",
+      "how much",
+      "pricing",
+      "sol"
+    ],
     "answer": "Pricing:\n- 3-4 chars: Premium (~$100-1000+ in SOL)\n- 5+ chars: Standard (~$20-50 in SOL)\n- Renewals vary by length\n\nPrices are paid in SOL and fluctuate with market rates. Check current prices at https://www.sns.id",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "subdomains",
     "question": "Can I create subdomains?",
-    "keywords": ["subdomain", "sub", "child", "create", "add"],
+    "keywords": [
+      "subdomain",
+      "sub",
+      "child",
+      "create",
+      "add"
+    ],
     "answer": "Yes! Create subdomains like blog.yourname.sol:\n1. Go to domain management\n2. Click Subdomains\n3. Enter name (e.g., 'blog')\n4. Set destination\n5. Confirm transaction\n\nGreat for organizing different services or projects.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "ipfs",
     "question": "How to link my domain to IPFS?",
-    "keywords": ["ipfs", "content", "hosting", "decentralized", "website", "pinata", "fleek"],
+    "keywords": [
+      "ipfs",
+      "content",
+      "hosting",
+      "decentralized",
+      "website",
+      "pinata",
+      "fleek"
+    ],
     "answer": "To link to IPFS:\n1. Upload site to IPFS (Pinata, Fleek, etc.)\n2. Get the CID\n3. Add TXT record: `_dnslink.yourname.sol` with value `dnslink=/ipfs/YOUR_CID`\n4. Add CNAME to IPFS gateway\n\nYour decentralized site will be live at your .sol domain!",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "refund",
     "question": "Can I get a refund?",
-    "keywords": ["refund", "money back", "cancel", "return", "payment"],
+    "keywords": [
+      "refund",
+      "money back",
+      "cancel",
+      "return",
+      "payment"
+    ],
     "answer": "No refunds - blockchain transactions are final. Please double-check your domain name, spelling, and price before purchasing. For double-charges or technical issues, contact support with your transaction signature.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sns-v1-vs-v2",
     "question": "What's the difference between SNS V1 and V2?",
-    "keywords": ["v1", "v2", "version", "difference", "migrate"],
+    "keywords": [
+      "v1",
+      "v2",
+      "version",
+      "difference",
+      "migrate"
+    ],
     "answer": "SNS V2 is the current version with better features and lower fees. V1 domains still work and can be managed, but new registrations use V2. To migrate V1 to V2, contact support. New users should only use V2.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "marketplace",
     "question": "Where can I buy/sell .sol domains?",
-    "keywords": ["marketplace", "buy", "sell", "trade", "magic eden", "tensor", "nft"],
+    "keywords": [
+      "marketplace",
+      "buy",
+      "sell",
+      "trade",
+      "magic eden",
+      "tensor",
+      "nft"
+    ],
     "answer": "Trade .sol domains on NFT marketplaces:\n- Magic Eden\n- Tensor\n- Hyperspace\n\n.sol domains are SPL NFTs, so they work on any Solana NFT marketplace. Check rarity, volume, and floor prices before trading.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "scam-warning",
     "question": "Is this a scam / fake admin?",
-    "keywords": ["scam", "fake", "admin", "dm", "message", "suspicious"],
+    "keywords": [
+      "scam",
+      "fake",
+      "admin",
+      "dm",
+      "message",
+      "suspicious"
+    ],
     "answer": "⚠️ SCAM WARNING:\nReal SNS admins NEVER:\n- DM you first\n- Ask for funds\n- Ask to validate your wallet\n- Send suspicious links\n\nAlways verify through official channels: https://discord.sns.id or https://www.sns.id",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "transaction-failed",
     "question": "My transaction failed - what happened?",
-    "keywords": ["transaction", "failed", "error", "stuck", "pending"],
+    "keywords": [
+      "transaction",
+      "failed",
+      "error",
+      "stuck",
+      "pending"
+    ],
     "answer": "Common causes:\n1. Insufficient SOL for gas\n2. Network congestion - retry with higher priority fee\n3. Wallet not connected properly\n4. Domain already registered\n\nCheck your wallet balance and retry. If SOL was deducted but domain not received, contact support with tx signature.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "domain-not-showing",
     "question": "I bought a domain but it's not showing in my wallet",
-    "keywords": ["not showing", "missing", "wallet", "bought", "purchased"],
+    "keywords": [
+      "not showing",
+      "missing",
+      "wallet",
+      "bought",
+      "purchased"
+    ],
     "answer": "Steps:\n1. Check transaction on explorer.solana.com - did it succeed?\n2. Make sure wallet is on Mainnet\n3. Refresh the page\n4. Check 'Collectibles' or 'NFTs' tab in your wallet\n\n.sol domains are NFTs and should appear in your wallet's NFT section.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "referral-program",
     "question": "How does the referral program work?",
-    "keywords": ["referral", "refer", "earn", "affiliate", "invite"],
+    "keywords": [
+      "referral",
+      "refer",
+      "earn",
+      "affiliate",
+      "invite"
+    ],
     "answer": "Refer friends and earn rewards:\n1. Get your referral link from the Refer & Earn page\n2. Share with friends\n3. Earn when they register domains\n\nCheck current reward rates on https://www.sns.id/referral",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sns-token",
     "question": "What is the $SNS token?",
-    "keywords": ["sns token", "$sns", "governance", "tokenomics", "utility"],
+    "keywords": [
+      "sns token",
+      "$sns",
+      "governance",
+      "tokenomics",
+      "utility"
+    ],
     "answer": "$SNS is the governance token for the Solana Name Service. Holders can vote on protocol decisions and participate in ecosystem incentives. Check tokenomics and distribution at https://www.sns.id/token",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "official-links",
     "question": "What are the official SNS links?",
-    "keywords": ["official", "link", "website", "discord", "twitter", "telegram"],
+    "keywords": [
+      "official",
+      "link",
+      "website",
+      "discord",
+      "twitter",
+      "telegram"
+    ],
     "answer": "Official links:\n- Website: https://www.sns.id\n- Discord: https://discord.sns.id\n- Twitter: https://x.com/sns\n- Telegram: https://t.me/snsdotsol\n- Docs: https://docs.sns.id\n- GitHub: https://github.com/SolanaNameService\n\n⚠️ Beware of fake accounts and phishing links!",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-cost",
     "question": "Does sol.site cost extra?",
-    "keywords": ["sol.site", "cost", "price", "extra", "fee", "free", "included"],
+    "keywords": [
+      "sol.site",
+      "cost",
+      "price",
+      "extra",
+      "fee",
+      "free",
+      "included"
+    ],
     "answer": "No. sol.site is completely FREE and included with your .sol domain purchase. There are no additional fees for using the sol.site feature.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-no-tech",
     "question": "I don't know tech. Can I still use sol.site?",
-    "keywords": ["tech", "technical", "coding", "developer", "no tech", "beginner", "easy", "simple"],
+    "keywords": [
+      "tech",
+      "technical",
+      "coding",
+      "developer",
+      "no tech",
+      "beginner",
+      "easy",
+      "simple"
+    ],
     "answer": "Absolutely! You get a ready-to-use profile page immediately after purchasing your .sol domain. Just share your `yourname.sol.site` link—no setup required. Want to customize later? Check the guides at https://docs.sns.id",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-vs-traditional",
     "question": "How is sol.site different from traditional domains?",
-    "keywords": ["traditional", "dns", "compare", "difference", "vs", "regular domain"],
+    "keywords": [
+      "traditional",
+      "dns",
+      "compare",
+      "difference",
+      "vs",
+      "regular domain"
+    ],
     "answer": "| Traditional Domains | .sol + sol.site |\n| --- | --- |\n| Rent yearly (~$10-20/year) | Buy once, own forever |\n| Separate from crypto | Web3 + Web2 combined |\n| Need extensions for Web3 | Works natively everywhere |\n\nTraditional domains are rentals. .sol domains are true ownership with sol.site bridging Web3 to traditional web.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-uses",
     "question": "What can I do with sol.site?",
-    "keywords": ["use", "purpose", "feature", "capability", "what can", "do with"],
+    "keywords": [
+      "use",
+      "purpose",
+      "feature",
+      "capability",
+      "what can",
+      "do with"
+    ],
     "answer": "Three main uses:\n\n1. Web3 Profile Page (Default) - Your instant identity page showing on-chain activity and NFTs\n2. Host Any Website - Static pages, blogs, portfolios, stores—anything works (compatible with GitHub Pages, Vercel, AWS)\n3. Private Email Address - Create anything@yourname.sol.site to receive emails without exposing your real email\n\nReal-world examples: Personal brand, Web3 projects, small business websites.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-who-can-use",
     "question": "Who can use sol.site?",
-    "keywords": ["who", "permission", "eligibility", "requirement", "can use", "access"],
+    "keywords": [
+      "who",
+      "permission",
+      "eligibility",
+      "requirement",
+      "can use",
+      "access"
+    ],
     "answer": "Any holder of a .sol domain registered through SNS. Once you own example.sol, you automatically get example.sol.site as a free feature.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-browser-requirement",
     "question": "Do visitors need browser extensions to access sol.site?",
-    "keywords": ["browser", "extension", "plugin", "visitor", "access", "require"],
+    "keywords": [
+      "browser",
+      "extension",
+      "plugin",
+      "visitor",
+      "access",
+      "require"
+    ],
     "answer": "No. sol.site works natively in all modern browsers (Chrome, Firefox, Safari, etc.) with zero extensions or special setup required. It's a standard web address.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-setup-time",
     "question": "How long until my sol.site works?",
-    "keywords": ["time", "setup", "how long", "wait", "ready", "duration"],
+    "keywords": [
+      "time",
+      "setup",
+      "how long",
+      "wait",
+      "ready",
+      "duration"
+    ],
     "answer": "| Situation | Timeline |\n| --- | --- |\n| Registered new domain | ~6+ hours (SSL + DNS setup) |\n| DNS changes | 5 minutes – 24 hours |\n\nNote: The internet is big. Your site might show up in some countries before others. This is normal.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-not-reached",
     "question": "Why do I see 'This site can't be reached'?",
-    "keywords": ["error", "not found", "can't reach", "site down", "not working", "failed"],
+    "keywords": [
+      "error",
+      "not found",
+      "can't reach",
+      "site down",
+      "not working",
+      "failed"
+    ],
     "answer": "Common causes:\n- Just registered? Wait 6 hours for initial SSL/DNS setup\n- Made DNS changes? Give it up to 24 hours to propagate globally\n- Specific location? Try checking from a different network or device\n\nIf still not working after 24h, check docs.sns.id for troubleshooting.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-subdomain",
     "question": "Does sol.site support subdomains?",
-    "keywords": ["subdomain", "sub-domain", "blog.", "www.", "child domain"],
+    "keywords": [
+      "subdomain",
+      "sub-domain",
+      "blog.",
+      "www.",
+      "child domain"
+    ],
     "answer": "No. Addresses like `blog.name.sol.site` are not supported. Your domain is `name.sol.site` only—clean and simple. This is by design to maintain compatibility.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-transfer",
     "question": "What happens if I transfer my .sol domain?",
-    "keywords": ["transfer", "sell", "move", "ownership", "what happens", "lose"],
+    "keywords": [
+      "transfer",
+      "sell",
+      "move",
+      "ownership",
+      "what happens",
+      "lose"
+    ],
     "answer": "When you transfer your .sol domain, all records move with it: social accounts, multi-chain addresses, other records, and the sol.site record are all retained. The new owner gets everything including the sol.site functionality.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-wallet-lost",
     "question": "What if I lose wallet access or get compromised?",
-    "keywords": ["lost", "compromised", "hacked", "wallet", "stolen", "recovery"],
+    "keywords": [
+      "lost",
+      "compromised",
+      "hacked",
+      "wallet",
+      "stolen",
+      "recovery"
+    ],
     "answer": "If you lose wallet access or get compromised, you will lose control over your .sol domain and sol.site—there's no recovery because ownership is tied to that wallet on-chain.\n\nContact SNS customer service to report this. We can assist in marking the hacked domain and disabling sol.site to protect the community from potential fraud.\n\n⚠️ Keep seed phrases offline and consider using a hardware wallet.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-dns-records",
     "question": "What DNS records does sol.site support?",
-    "keywords": ["dns", "record", "cname", "a record", "mx", "txt", "aaaa", "supported"],
+    "keywords": [
+      "dns",
+      "record",
+      "cname",
+      "a record",
+      "mx",
+      "txt",
+      "aaaa",
+      "supported"
+    ],
     "answer": "Supported DNS records:\n- CNAME: 1 record (points to your CDN/hosting domain)\n- A Records: Up to 3 (IPv4 addresses)\n- AAAA Records: Up to 3 (IPv6 addresses)\n- MX Records: Up to 4 (for email)\n- TXT Records: Up to 5 (SPF, verification, etc.)",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-dynamic-apps",
     "question": "Can I use dynamic apps or serverless hosting with sol.site?",
-    "keywords": ["dynamic", "serverless", "vercel", "next.js", "react", "app", "function"],
+    "keywords": [
+      "dynamic",
+      "serverless",
+      "vercel",
+      "next.js",
+      "react",
+      "app",
+      "function"
+    ],
     "answer": "Yes! sol.site fully supports modern hosting platforms including Vercel, GitHub Pages, AWS, etc. You can host dynamic React/Next.js apps, serverless functions, APIs, and more.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-psl",
     "question": "Hosting platform asks me to verify root domain ownership",
-    "keywords": ["psl", "public suffix", "verify", "ownership", "root domain", "platform"],
+    "keywords": [
+      "psl",
+      "public suffix",
+      "verify",
+      "ownership",
+      "root domain",
+      "platform"
+    ],
     "answer": "Good news: This isn't your fault! `sol.site` is officially on the Public Suffix List (PSL). Most platforms already support it.\n\nIf one doesn't, they just haven't updated their system yet. Contact their support and mention PSL updates—this is on their end, not SNS.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-domain-rejected",
     "question": "Why is my domain rejected for sol.site?",
-    "keywords": ["rejected", "blocked", "not allowed", "invalid", "error", "domain"],
+    "keywords": [
+      "rejected",
+      "blocked",
+      "not allowed",
+      "invalid",
+      "error",
+      "domain"
+    ],
     "answer": "Possible reasons:\n\n**Unsupported Characters**\n- ✅ Allowed: Letters a-z, numbers 0-9, hyphens\n- ❌ Not allowed: Emojis, Chinese/Japanese/Korean characters, special symbols\n\n**Domain Type**\n- ❌ Subdomains not supported\n- ❌ Listed/reserved domains blocked\n\n**Security Blocks**\nHigh-risk names (like `paypal.sol`, brand impersonations) are blocked to prevent scams and protect users.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-take-back",
     "question": "Can SNS take my sol.site domain back?",
-    "keywords": ["take back", "revoke", "seize", "remove", "ownership", "control"],
+    "keywords": [
+      "take back",
+      "revoke",
+      "seize",
+      "remove",
+      "ownership",
+      "control"
+    ],
     "answer": "Generally no—your domain is yours. However, exceptions exist for sol.site:\n\n- Impersonating brands (trademark violations)\n- Hosting illegal content\n- Using for fraud/phishing\n\nThese exceptions protect the community and keep .sol.site domains trustworthy.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-email",
     "question": "Can I receive emails at my sol.site domain?",
-    "keywords": ["email", "mail", "receive", "inbox", "address", "mx"],
+    "keywords": [
+      "email",
+      "mail",
+      "receive",
+      "inbox",
+      "address",
+      "mx"
+    ],
     "answer": "Yes! You can create `anything@yourname.sol.site` email addresses to receive emails. Set up MX records (up to 4 supported) and TXT records for SPF/verification in your DNS settings.",
-    "confidence": 1.0
-  },
-  {
-    "id": "sol-site-complete-setup-flow",
-    "question": "What is the complete sol.site configuration process?",
-    "keywords": ["setup", "configure", "process", "flow", "steps", "complete", "guide", "how to setup", "configuration"],
-    "answer": "**Complete sol.site Configuration Flow:**\n\n**Step 1: Acquire .sol Domain**\n• Purchase via https://www.sns.id\n• Format: example.sol\n• Price: Based on character length (3-4 chars premium, 5+ standard)\n\n**Step 2: Select Hosting Provider**\nGet DNS records from your hosting platform:\n\n| Platform | Use Case | How to Get Records |\n|----------|----------|-------------------|\n| Vercel | React/Next.js apps | Dashboard → Domains → Enter sol.site → Copy records |\n| GitHub Pages | Static sites | Settings → Pages → Custom domain → Get A/AAAA records |\n| AWS + CloudFront | Enterprise | Route 53 or CloudFront CNAME |\n| Cloudflare Pages | Edge deployment | Dashboard → Custom domains → Get records (coming in 8 weeks) |\n\n**PSL Note:** sol.site is on the Public Suffix List. All major platforms should support it. If not, contact platform support—it's their PSL sync issue, not sol.site.\n\n**Step 3: SNS DNS Configuration**\nPath: SNS Platform → Domain profile → sol.site section → Configure Records\n\nSupported Records:\n• CNAME: 1 record (points to CDN/hosting)\n• A Records: Up to 3 (IPv4)\n• AAAA Records: Up to 3 (IPv6)\n• MX Records: Up to 4 (email)\n• TXT Records: Up to 5 (verification, SPF)\n\n**Step 4: DNS Propagation**\n• Typical time: 5 minutes to 24 hours\n• Depends on DNS TTL and caching\n• Check with dig or online propagation tools\n\n**Step 5: Access Verification**\n• Browser: https://example.sol.site\n• HTTPS certificate auto-issued via Let's Encrypt",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-vs-eth-limo",
     "question": "How does sol.site compare to eth.limo?",
-    "keywords": ["eth.limo", "ENS", "comparison", "vs", "difference", "competitor", "IPFS", "ethereum"],
+    "keywords": [
+      "eth.limo",
+      "ENS",
+      "comparison",
+      "vs",
+      "difference",
+      "competitor",
+      "IPFS",
+      "ethereum"
+    ],
     "answer": "**sol.site vs eth.limo Comparison:**\n\n| Feature | eth.limo (ENS) | .sol.site (SNS) |\n|---------|----------------|-----------------|\n| **Product Positioning** | Web3→Web2 Content Gateway | Web3 Identity→Web2 Domain Bridge |\n| **Technical Nature** | IPFS reverse proxy | PSL-certified domain + DNS |\n| **Browser Support** | Requires extensions/Brave | All modern browsers (native) |\n| **Hosting Support** | ❌ Cannot bind to Vercel/GitHub | ✅ Supports Vercel, GitHub Pages, AWS |\n| **SSL Certificate** | ❌ Cannot apply independently | ✅ Auto-issued via Let's Encrypt |\n| **Content Type** | Static only (IPFS) | Dynamic apps, Serverless |\n| **SEO Support** | Limited | Full support |\n| **Cookie Isolation** | All *.eth.limo share cookies | Each *.sol.site independent |\n| **Cost** | Annual renewal ($5-$640) | One-time ($20) |\n\n**Key Advantage:** sol.site uses standard DNS infrastructure that works everywhere, while eth.limo requires understanding IPFS/contenthash and only works with extensions.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-vs-unstoppable-domains",
     "question": "How does sol.site compare to Unstoppable Domains?",
-    "keywords": ["unstoppable domains", "UD", ".crypto", ".x", ".nft", "comparison", "difference"],
+    "keywords": [
+      "unstoppable domains",
+      "UD",
+      ".crypto",
+      ".x",
+      ".nft",
+      "comparison",
+      "difference"
+    ],
     "answer": "**sol.site vs Unstoppable Domains Comparison:**\n\n| Aspect | Unstoppable Domains | sol.site |\n|--------|---------------------|----------|\n| **Browser Extension** | Required | Not required |\n| **Native Support** | Only Brave browser | All modern browsers |\n| **Protocol** | Blockchain + IPFS | Standard DNS + HTTP |\n| **Configuration** | Complex (gas fees, IPFS) | Medium (standard DNS) |\n| **Content Hosting** | Decentralized (IPFS only) | Centralized (Vercel/AWS) |\n| **Performance** | IPFS-dependent | Traditional CDN speed |\n| **Dynamic Apps** | ❌ Static only | ✅ Full support |\n| **SEO** | Limited | Full support |\n\n**Pricing Comparison (UD .crypto vs .sol):**\n| Length | UD .crypto | .sol |\n|--------|-----------|------|\n| 5 chars | $300 | $20 |\n| 6 chars | $200 | $20 |\n| 8+ chars | $40 | $20 |\n\n**User Flow Complexity:**\n- **UD**: Purchase → Mint (gas) → Upload to IPFS → Get CID → Configure → Visitors need extension\n- **sol.site**: Purchase → Get DNS from host → Enter in SNS panel → Done (any browser)",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-cost-comparison",
     "question": "How much does sol.site cost compared to traditional domains?",
-    "keywords": ["cost", "price", "compare", "expensive", "cheap", "renewal", "5 year", "budget"],
+    "keywords": [
+      "cost",
+      "price",
+      "compare",
+      "expensive",
+      "cheap",
+      "renewal",
+      "5 year",
+      "budget"
+    ],
     "answer": "**5-Year Total Cost Comparison:**\n\n| Domain Type | Initial Cost | Annual Renewal | 5-Year Total | Privacy |\n|-------------|--------------|----------------|--------------|---------|\n| **.sol + sol.site** | $20 | $0 | **$20** | Free |\n| Unstoppable Domains | $40-300 | $0 | $40-300 | Free |\n| GoDaddy (.com) | $0.01-15 | $18.29 | $91.46 | $9.99/yr |\n| Namecheap (.com) | $10-13 | $13.48 | $67.42 | Free |\n| Hostinger (.id) | $12.99 | $15.99 | $79.95 | Paid |\n\n**Key Advantage:**\n• **.sol + sol.site = $20 forever** (one-time payment)\n• Traditional domains = $67-91 over 5 years (and keeps renewing)\n• No surprise renewal fees, no price hikes\n\n**Ownership Model:**\n• Traditional domains = Lease (lose if not renewed)\n• .sol + sol.site = Permanent (yours forever)",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-use-cases",
     "question": "What are the real-world use cases for sol.site?",
-    "keywords": ["use case", "example", "scenario", "who should use", "purpose", "website type"],
+    "keywords": [
+      "use case",
+      "example",
+      "scenario",
+      "who should use",
+      "purpose",
+      "website type"
+    ],
     "answer": "**Real-World Use Cases for sol.site:**\n\n**1. Personal Brand**\n• Entrepreneurs: john.sol.site as personal homepage\n• Showcase portfolio, social links, contact info\n• Set up once, own forever\n\n**2. Project Showcase**\n• Web3 projects: project.sol.site\n• Dynamically update project progress\n• Community can access directly via domain\n\n**3. Business Alternative**\n• Small businesses save on domain costs\n• Censorship-resistant business presence\n• Web3-native customer recognition\n\n**4. What You Can Build:**\n• Personal portfolio/resume sites\n• Project landing pages\n• Business websites\n• Blogs and content sites\n• Community hubs\n• Email addresses (anything@yourname.sol.site)\n\n**Works With:** Vercel, GitHub Pages, AWS, Cloudflare (coming soon), and any standard web hosting.",
-    "confidence": 1.0
+    "confidence": 1
   },
   {
     "id": "sol-site-limitations",
     "question": "What are the limitations and restrictions of sol.site?",
-    "keywords": ["limitation", "restriction", "not supported", "can't", "unable", "block", "delay"],
+    "keywords": [
+      "limitation",
+      "restriction",
+      "not supported",
+      "can't",
+      "unable",
+      "block",
+      "delay"
+    ],
     "answer": "**Important Limitations of sol.site:**\n\n**⚠️ Character Restrictions**\n• Allowed: a-z, 0-9, hyphen (-)\n• **Not supported:** Emojis, Chinese/Japanese/Korean characters, special symbols\n\n**⚠️ Domain Type Restrictions**\n• Not available for: Subdomains, listed domains, sub-registrar domains\n\n**⚠️ Risk Score Restrictions**\n• High-risk domains flagged by SNS engine are blocked\n• Example: paypal.sol, brand impersonations\n\n**⚠️ New Domain Activation Delay**\n• Newly registered domains: sol.site may take **6+ hours** to work\n• Reason: DNS propagation + SSL certificate provisioning\n\n**⚠️ Holding Period Restriction**\n• External DNS configuration disabled if domain held < 48 hours\n• Security measure to prevent abuse\n\n**⚠️ Technical Limitations**\n• Requires owning the .sol domain first\n• DNS configuration knowledge needed\n• Propagation time varies (5 min to 24 hours)",
-    "confidence": 1.0
+    "confidence": 1
+  },
+  {
+    "id": "admin-taught-1772790329804",
+    "question": "Are there any discounts on domain registration recently?",
+    "keywords": [
+      "there",
+      "discounts",
+      "domain",
+      "registration",
+      "recently?"
+    ],
+    "answer": "Yes, if you use $SNS token to register a domain, you will receive a 5% discount.",
+    "confidence": 1,
+    "source": "admin:winniewen",
+    "createdAt": "2026-03-06"
+  },
+  {
+    "id": "admin-taught-1772790870702",
+    "question": "Are there any discounts on domain registration recently?",
+    "keywords": [
+      "there",
+      "discounts",
+      "domain",
+      "registration",
+      "recently?"
+    ],
+    "answer": "Yes, if you use $SNS token to register a domain, you will receive a 5% discount.",
+    "confidence": 1,
+    "source": "admin:winniewen",
+    "createdAt": "2026-03-06"
   }
 ]

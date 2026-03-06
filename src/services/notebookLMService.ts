@@ -7,7 +7,7 @@ import { execSync } from 'child_process';
 import { config } from '../config/env';
 
 const NOTEBOOK_ALIAS = 'sns-core';
-const NLM_CMD = '~/.local/bin/uvx --from notebooklm-mcp-cli nlm';
+const NLM_CMD = 'source ~/.openclaw/venvs/notebooklm/bin/activate && nlm';
 
 interface NotebookLMResult {
   answer: string;

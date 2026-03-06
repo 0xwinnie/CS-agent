@@ -76,7 +76,9 @@ IMPORTANT RULES:
 2. Only use the provided FAQ content, do not make up information
 3. If the FAQ content is insufficient, honestly say you don't know
 4. Keep a friendly, concise tone
-5. Use emoji appropriately (1-2 max)`;
+5. Use emoji appropriately (1-2 max)
+6. DO NOT include any URLs or links in your answer
+7. If the FAQ mentions a website/link, summarize the information without including the URL`;
 
   const userPrompt = `User question: "${question}"\n\nRelevant FAQs:\n${contextText}\n\nPlease answer based on the FAQs above. Respond in ENGLISH:`;
 
@@ -108,9 +110,19 @@ IMPORTANT RULES:
       choices?: Array<{ message?: { content?: string } }>;
     };
 
-    const answer = data.choices?.[0]?.message?.content?.trim();
+    let answer = data.choices?.[0]?.message?.content?.trim();
 
-    if (answer) {
+    // Safety: if AI returns JSON, extract the text content
+    if (answer && answer.startsWith('{') && answer.endsWith('}')) {
+      try {
+        const parsed = JSON.parse(answer);
+        answer = parsed.response || parsed.text || parsed.answer || answer;
+      } catch {
+        // Not valid JSON, use as is
+      }
+    }
+
+    if (answer && answer.length > 2) {
       return {
         answer,
         sources: retrieved.map(r => r.entry),

@@ -7,6 +7,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { generateEmbedding, cosineSimilarity } from './embeddingService';
 
+// Re-export for other modules
+export { generateEmbedding, cosineSimilarity };
+
 const KB_PATH = path.resolve(__dirname, '../../data/knowledge-base.json');
 const EMBEDDINGS_PATH = path.resolve(__dirname, '../../data/kb-embeddings.json');
 
@@ -36,7 +39,9 @@ function loadEmbeddedKB(): EmbeddedEntry[] {
     // Try to load pre-computed embeddings
     if (fs.existsSync(EMBEDDINGS_PATH)) {
       const data = fs.readFileSync(EMBEDDINGS_PATH, 'utf-8');
-      embeddedKB = JSON.parse(data);
+      const parsed = JSON.parse(data);
+      // Support both { entries: [...] } and flat array formats
+      embeddedKB = parsed.entries || parsed;
       kbLoaded = true;
       console.log(`✅ Loaded ${embeddedKB.length} embedded KB entries`);
       return embeddedKB;
@@ -78,8 +83,8 @@ export async function buildKBEmbeddings(): Promise<void> {
       await new Promise(resolve => setTimeout(resolve, 200));
     }
 
-    // Save to disk
-    fs.writeFileSync(EMBEDDINGS_PATH, JSON.stringify(embedded));
+    // Save to disk (wrapped in { entries: [...] } structure)
+    fs.writeFileSync(EMBEDDINGS_PATH, JSON.stringify({ entries: embedded }));
     console.log(`✅ Saved ${embedded.length} embeddings to ${EMBEDDINGS_PATH}`);
 
     // Update cache
@@ -147,9 +152,11 @@ export function getKBStats(): { total: number; embedded: number } {
     const kbData = fs.readFileSync(KB_PATH, 'utf-8');
     const entries: KnowledgeBaseEntry[] = JSON.parse(kbData);
 
-    const embedded = fs.existsSync(EMBEDDINGS_PATH)
-      ? JSON.parse(fs.readFileSync(EMBEDDINGS_PATH, 'utf-8')).length
-      : 0;
+    let embedded = 0;
+    if (fs.existsSync(EMBEDDINGS_PATH)) {
+      const raw = JSON.parse(fs.readFileSync(EMBEDDINGS_PATH, 'utf-8'));
+      embedded = raw.entries ? raw.entries.length : raw.length;
+    }
 
     return { total: entries.length, embedded };
   } catch {

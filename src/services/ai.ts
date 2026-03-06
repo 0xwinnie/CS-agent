@@ -11,12 +11,14 @@ const PROVIDERS = {
   openrouter: {
     baseURL: 'https://openrouter.ai/api/v1',
     apiKey: config.openrouterApiKey,
-    models: [
-      'openrouter/moonshot/kimi-k2.5',  // Primary
-      'openrouter/google/gemini-2.5-flash',  // Fallback 1
-      'openrouter/anthropic/claude-sonnet-4-5',  // Fallback 2
-      'openrouter/openrouter/auto',  // Fallback 3 (smart routing)
-    ]
+    // Use configured fallback chain or defaults
+    models: config.modelFallbackChain.length > 0 
+      ? config.modelFallbackChain 
+      : [
+          'google/gemini-2.5-flash',  // Primary - stable
+          'openrouter/auto',           // Fallback - smart routing
+          'moonshot/kimi-k2.5'         // Last resort
+        ]
   },
   openai: {
     baseURL: 'https://api.openai.com/v1',
