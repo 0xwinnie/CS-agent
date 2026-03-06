@@ -1,22 +1,20 @@
 #!/usr/bin/env node
 /**
- * Daily Feedback Report Generator
- * Run this script daily to generate user feedback reports
- * Usage: node scripts/generateDailyReport.js
+ * Daily Digest Generator
+ * Run this via cron: node scripts/generateDailyReport.js
  */
 
-import { generateAndSaveMarkdownReport } from '../src/services/feedbackReport';
+import { generateDailyDigest } from '../src/services/dailyDigest';
 
-console.log('📊 Generating daily feedback report...\n');
+console.log('📊 Generating daily digest...\n');
 
-try {
-  const markdown = generateAndSaveMarkdownReport();
-  
-  console.log('\n✅ Report generated successfully!\n');
-  console.log('---');
-  console.log(markdown);
-  
-} catch (error) {
-  console.error('❌ Failed to generate report:', error);
-  process.exit(1);
-}
+generateDailyDigest()
+  .then((digest) => {
+    console.log('\n✅ Digest generated:\n');
+    console.log('---');
+    console.log(digest);
+  })
+  .catch((error) => {
+    console.error('❌ Failed to generate digest:', error);
+    process.exit(1);
+  });

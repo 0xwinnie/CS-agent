@@ -1,171 +1,164 @@
 /**
- * Soul Engine - Simplified AI-Driven Core
- * 边界约束 + AI 自主决策
+ * Soul Engine — Refactored
+ * 
+ * Simplified flow:
+ *   Message in → Filter → RAG lookup → Single LLM call → Post-process → Reply
+ * 
+ * No intent classification step. No switch/case routing.
+ * SOUL.md handles all behavioral decisions via the system prompt.
  */
 
 import { Message, Client } from 'discord.js';
 import { config } from '../config/env';
-import { judgeIntent, extractTeaching, generateBoundedReply, generateCasualReply } from '../services/aiJudge';
+import { generateDoryReply } from '../services/ai';
 import { semanticSearch, hasEmbeddings } from '../services/semanticKB';
-import { addToKnowledgeBase } from '../services/adminLearning';
+import { logMessage, MessageLogEntry } from '../services/messageLog';
 
-// Simple in-memory state
+// ── Session memory (in-memory, per user per channel) ───────────────
+
 interface ChatSession {
-  lastQuestion: string;
-  lastAnswer: string;
-  timestamp: number;
+  history: Array<{ role: 'user' | 'assistant'; content: string }>;
+  lastActivity: number;
 }
-const sessions = new Map<string, ChatSession>(); // key: userId_channelId
-const ADMIN_IDS = new Set(config.adminUserIds);
 
-const SESSION_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes
+const sessions = new Map<string, ChatSession>();
+const SESSION_TTL = 10 * 60 * 1000; // 10 minutes
+const MAX_HISTORY = 4; // Keep last 2 exchanges (4 messages)
 
-/**
- * Main message handler - simplified flow
- */
+// ── Main handler ───────────────────────────────────────────────────
+
 export async function handleSoulMessage(message: Message, client: Client): Promise<void> {
+  // ─── Gate 1: Skip bots ───
   if (message.author.bot) return;
 
-  const userId = message.author.id;
-  const channelId = message.channel.id;
-  const sessionKey = `${userId}_${channelId}`;
-  const isMentioned = message.mentions.has(client.user!.id);
-  const isAdmin = ADMIN_IDS.has(userId);
+  // ─── Gate 2: Only respond when addressed ───
+  const botId = client.user!.id;
+  const isMentioned = message.mentions.has(botId);
+  const mentionsDory = message.content.toLowerCase().includes('dory');
 
-  console.log(`[${new Date().toISOString()}] ${message.author.tag}: "${message.content.substring(0, 60)}..."`);
+  if (!isMentioned && !mentionsDory) return;
 
-  // 1. Check if admin is correcting previous answer
-  const session = sessions.get(sessionKey);
-  if (isAdmin && session && (Date.now() - session.timestamp < SESSION_EXPIRY_MS)) {
-    const teaching = await extractTeaching(
-      message.content,
-      session.lastAnswer,
-      session.lastQuestion
-    );
-
-    if (teaching.isTeaching && teaching.question && teaching.answer) {
-      const result = await addToKnowledgeBase(
-        teaching.question,
-        teaching.answer,
-        [], // AI will extract keywords during embedding
-        message.author.tag
-      );
-
-      if (result.success) {
-        await message.reply('🎓 Got it! I\'ve learned something new.');
-        console.log(`✅ Learned from admin: ${result.entryId}`);
-      } else {
-        await message.reply(`📝 Noted, but couldn't save: ${result.error}`);
-      }
-      return;
-    }
-  }
-
-  // 2. Only respond if mentioned or appears to be asking us
-  if (!isMentioned && !message.content.toLowerCase().includes('cs agent')) {
-    // Could add smarter detection here if needed
-    return;
-  }
-
-  // 3. AI judges intent
+  // ─── Extract clean message ───
   const content = message.content
-    .replace(new RegExp(`<@!?${client.user!.id}>`, 'g'), '')
-    .replace(/cs agent/gi, '')
+    .replace(new RegExp(`<@!?${botId}>`, 'g'), '')
+    .replace(/\bdory\b/gi, '')
     .trim();
 
-  const context = session
-    ? `Previous: Q: "${session.lastQuestion}" A: "${session.lastAnswer}"`
-    : '';
-
-  const intent = await judgeIntent(content, context, isAdmin);
-  console.log(`🎯 Intent: ${intent.intent} (${(intent.confidence * 100).toFixed(0)}%) - ${intent.reasoning}`);
-
-  // 4. Handle based on intent
-  let reply: string;
-
-  if (!intent.shouldAnswer) {
-    console.log('🤫 AI decided not to answer');
+  if (!content) {
+    await message.reply("Hey! 👋 Did you need something?");
     return;
   }
 
-  switch (intent.intent) {
-    case 'sns_question':
-      reply = await handleSNSQuestion(content, message.author.username, intent.suggestedTone || 'professional');
-      break;
-    
-    case 'correction':
-      // Already handled above, but if we missed it
-      reply = "📝 Thanks for the feedback! I'll do better next time.";
-      break;
-    
-    case 'greeting':
-    case 'chitchat':
-    case 'off_topic':
-    default:
-      reply = await generateCasualReply(content, intent.intent, message.author.username);
-      break;
-  }
+  const username = message.author.username;
+  const sessionKey = `${message.author.id}_${message.channel.id}`;
 
-  // 5. Send reply
-  await message.reply(reply);
+  console.log(`[${new Date().toISOString()}] ${message.author.tag}: "${content.substring(0, 80)}"`);
 
-  // 6. Store session for potential correction
-  if (intent.intent === 'sns_question') {
-    sessions.set(sessionKey, {
-      lastQuestion: content,
-      lastAnswer: reply,
-      timestamp: Date.now()
-    });
-  }
+  // ─── RAG: Find relevant knowledge ───
+  let knowledgeContext: string | null = null;
 
-  // Cleanup old sessions
-  cleanupSessions();
-
-  console.log(`✅ Replied to ${message.author.tag}`);
-}
-
-/**
- * Handle SNS-specific question with RAG
- */
-async function handleSNSQuestion(
-  question: string,
-  username: string,
-  tone: string
-): Promise<string> {
-  // Try semantic search if available
-  let knowledge: string | null = null;
-  
   if (hasEmbeddings()) {
     try {
-      const results = await semanticSearch(question, 1);
-      if (results.length > 0 && results[0].similarity > 0.7) {
-        knowledge = results[0].entry.answer;
-        console.log(`📚 RAG match: ${results[0].similarity.toFixed(2)}`);
+      const results = await semanticSearch(content, 3);
+      const relevant = results.filter(r => r.similarity > 0.65);
+
+      if (relevant.length > 0) {
+        knowledgeContext = relevant
+          .map(r => `Q: ${r.entry.question}\nA: ${r.entry.answer}`)
+          .join('\n\n---\n\n');
+        console.log(`📚 RAG: ${relevant.length} match(es), best=${relevant[0].similarity.toFixed(2)}`);
       }
     } catch (e) {
       console.error('RAG search failed:', e);
     }
   }
 
-  // Generate AI reply with knowledge
-  return generateBoundedReply(question, knowledge, tone, username);
+  // ─── Build conversation history ───
+  const session = getSession(sessionKey);
+  const conversationHistory = session.history.length > 0
+    ? session.history.map(h => `${h.role === 'user' ? 'User' : 'Dory'}: ${h.content}`).join('\n')
+    : undefined;
+
+  // ─── Single LLM call ───
+  let reply = await generateDoryReply(content, {
+    knowledgeBase: knowledgeContext || undefined,
+    conversationHistory,
+    username,
+  });
+
+  // ─── Post-processing ───
+  reply = postProcess(reply);
+
+  // ─── Send reply ───
+  await message.reply(reply);
+
+  // ─── Update session ───
+  addToSession(sessionKey, content, reply);
+
+  // ─── Silent logging ───
+  logMessage({
+    userId: message.author.id,
+    userTag: message.author.tag,
+    username,
+    content,
+    reply,
+    channel: 'name' in message.channel ? (message.channel as any).name : 'DM',
+    hadKnowledgeBase: !!knowledgeContext,
+    timestamp: new Date().toISOString(),
+  });
+
+  console.log(`✅ Replied to ${message.author.tag}`);
 }
 
-/**
- * Cleanup old sessions
- */
-function cleanupSessions(): void {
-  const now = Date.now();
-  for (const [key, session] of sessions.entries()) {
-    if (now - session.timestamp > SESSION_EXPIRY_MS) {
-      sessions.delete(key);
-    }
+// ── Post-processing ────────────────────────────────────────────────
+
+function postProcess(reply: string): string {
+  // Remove any URLs that slipped through (SOUL.md instructs not to generate them,
+  // but this is a safety net)
+  let cleaned = reply.replace(/https?:\/\/[^\s)]+/g, '[visit sns.id]');
+
+  // Trim excessive length (Discord has 2000 char limit, we aim for much less)
+  if (cleaned.length > 800) {
+    cleaned = cleaned.substring(0, 797) + '...';
+  }
+
+  return cleaned;
+}
+
+// ── Session management ─────────────────────────────────────────────
+
+function getSession(key: string): ChatSession {
+  cleanupSessions();
+
+  const existing = sessions.get(key);
+  if (existing && Date.now() - existing.lastActivity < SESSION_TTL) {
+    return existing;
+  }
+
+  const newSession: ChatSession = { history: [], lastActivity: Date.now() };
+  sessions.set(key, newSession);
+  return newSession;
+}
+
+function addToSession(key: string, userMessage: string, botReply: string): void {
+  const session = sessions.get(key);
+  if (!session) return;
+
+  session.history.push({ role: 'user', content: userMessage });
+  session.history.push({ role: 'assistant', content: botReply });
+  session.lastActivity = Date.now();
+
+  // Keep only recent history
+  if (session.history.length > MAX_HISTORY) {
+    session.history = session.history.slice(-MAX_HISTORY);
   }
 }
 
-/**
- * Reset session for a user (e.g., after learning)
- */
-export function clearSession(userId: string, channelId: string): void {
-  sessions.delete(`${userId}_${channelId}`);
+function cleanupSessions(): void {
+  const now = Date.now();
+  for (const [key, session] of sessions.entries()) {
+    if (now - session.lastActivity > SESSION_TTL) {
+      sessions.delete(key);
+    }
+  }
 }

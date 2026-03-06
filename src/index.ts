@@ -1,18 +1,22 @@
 /**
- * CS Agent Bot - Refactored AI-Driven Version
- * Simple boundary constraints + AI autonomous decisions
+ * Dory — SNS Community Helper Bot
+ * 
+ * Clean entry point. All behavior lives in SOUL.md (loaded by ai.ts).
+ * All digest logic lives in DIGEST_PROMPT.md (loaded by dailyDigest.ts).
  */
 
 import { Client, GatewayIntentBits, ActivityType, Events } from 'discord.js';
 import { config, validateEnv } from './config/env';
-import { handleSoulMessage, clearSession } from './core/soulEngine';
-import { isAdmin } from './services/adminLearning';
-import { generateAndSaveMarkdownReport } from './services/feedbackReport';
+import { handleSoulMessage } from './core/soulEngine';
+import { generateDailyDigest, getLatestReport } from './services/dailyDigest';
+import { reloadPrompts } from './services/ai';
 
-// Validate environment before starting
+// ── Startup checks ─────────────────────────────────────────────────
+
 validateEnv();
 
-// Create Discord client with required intents
+// ── Discord client ─────────────────────────────────────────────────
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -23,27 +27,20 @@ const client = new Client({
   ],
 });
 
-/**
- * Bot ready event handler
- */
+// ── Ready ──────────────────────────────────────────────────────────
+
 client.once(Events.ClientReady, () => {
-  const botName = client.user?.tag || 'Unknown';
   console.log('========================================');
-  console.log(`🤖 ${botName} is online!`);
-  console.log('========================================');
+  console.log(`🐟 Dory is online! (${client.user?.tag})`);
   console.log(`📊 Serving ${client.guilds.cache.size} server(s)`);
-  console.log('✅ AI-driven mode activated');
-  console.log('🧠 Semantic search: Active');
-  console.log('🎯 Admin learning: Active');
+  console.log('🧠 Mode: SOUL.md driven');
   console.log('========================================');
-  
-  // Set bot activity
+
   client.user?.setActivity('SNS Community', { type: ActivityType.Watching });
 });
 
-/**
- * Message create event handler
- */
+// ── Message handler ────────────────────────────────────────────────
+
 client.on(Events.MessageCreate, async (message) => {
   try {
     await handleSoulMessage(message, client);
@@ -52,60 +49,71 @@ client.on(Events.MessageCreate, async (message) => {
   }
 });
 
-/**
- * Guild member add - Welcome new members
- */
+// ── Welcome new members ────────────────────────────────────────────
+
 client.on(Events.GuildMemberAdd, async (member) => {
   console.log(`👋 New member joined: ${member.user.tag}`);
-  
+
   try {
     await member.send(
       `👋 Welcome to the SNS community!\n\n` +
-      `I'm CS Agent, your community assistant.\n` +
-      `If you have any questions about sol.site or .sol domains, feel free to @mention me anytime.\n\n` +
-      `There are many helpful folks here—don't hesitate to chat with everyone! 😊`
+      `I'm Dory, your community helper.\n` +
+      `If you have any questions about .sol domains or sol.site, just @mention me anytime.\n\n` +
+      `There are many helpful folks here — don't hesitate to ask! 😊`
     );
-    console.log(`📤 Sent welcome DM to ${member.user.tag}`);
-  } catch (error) {
-    console.log(`⚠️ Could not DM ${member.user.tag} (probably has DMs disabled)`);
+  } catch {
+    console.log(`⚠️ Could not DM ${member.user.tag} (DMs probably disabled)`);
   }
 });
 
-/**
- * Error event handler
- */
+// ── Error handler ──────────────────────────────────────────────────
+
 client.on(Events.Error, (error) => {
   console.error('❌ Discord client error:', error);
 });
 
-// Login to Discord
+// ── Console commands (for admin use) ───────────────────────────────
+
+process.stdin.on('data', async (data) => {
+  const command = data.toString().trim();
+
+  switch (command) {
+    case 'digest':
+      console.log('📊 Generating daily digest...');
+      const digest = await generateDailyDigest();
+      console.log('\n' + digest);
+      break;
+
+    case 'latest':
+      const report = getLatestReport();
+      console.log(report || 'No reports found.');
+      break;
+
+    case 'reload':
+      reloadPrompts();
+      break;
+
+    case 'help':
+      console.log('Commands: digest, latest, reload, help');
+      break;
+  }
+});
+
+// ── Connect ────────────────────────────────────────────────────────
+
 console.log('🔌 Connecting to Discord...');
 client.login(config.discordToken).catch((error) => {
   console.error('❌ Failed to login:', error.message);
   process.exit(1);
 });
 
-// Admin command handler (via console)
-process.stdin.on('data', (data) => {
-  const command = data.toString().trim();
-  
-  if (command === 'report') {
-    console.log('📊 Generating report...');
-    generateAndSaveMarkdownReport();
-  } else if (command === 'help') {
-    console.log('Available commands: report, help');
-  }
-});
+// ── Graceful shutdown ──────────────────────────────────────────────
 
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n👋 Shutting down gracefully...');
+const shutdown = () => {
+  console.log('\n👋 Shutting down...');
   client.destroy();
   process.exit(0);
-});
+};
 
-process.on('SIGTERM', () => {
-  console.log('\n👋 Shutting down gracefully...');
-  client.destroy();
-  process.exit(0);
-});
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
