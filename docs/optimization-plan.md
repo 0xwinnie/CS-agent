@@ -1,112 +1,112 @@
-# CS-Agent 优化方案 - 基于第一性原理分析
+# CS-Agent Optimization Plan - First Principles Analysis
 
-## 第一性原理思考
+## First Principles Thinking
 
-### 1. 响应速度问题的本质
-**核心问题**: 用户等待时间长（API调用延迟）
+### 1. The Essence of Response Speed Issues
+**Core Problem**: Users wait too long (API call latency)
 
-**第一性分解**:
-- 每次消息 → AI API调用 → 等待生成 → 返回
-- 这是**顺序阻塞**模式
-- AI生成是不可控的外部依赖
+**First Principles Breakdown**:
+- Each message → AI API call → Wait for generation → Return
+- This is a **sequential blocking** pattern
+- AI generation is an uncontrollable external dependency
 
-**优化方向**:
-- **知识库优先**: 先本地匹配，命中则直接返回（零延迟）
-- **预加载热点**: 常见问题的答案预生成
-- **流式响应**: 先回"正在思考"，再编辑消息
-- **边缘缓存**: 相似问题的答案缓存
+**Optimization Directions**:
+- **Knowledge base priority**: Local matching first, if hit return directly (zero latency)
+- **Preload hotspots**: Pre-generate answers for common questions
+- **Streaming responses**: First reply "Thinking...", then edit message
+- **Edge caching**: Cache answers for similar questions
 
-### 2. 准确度问题的本质
-**核心问题**: AI 不知道准确答案，或混淆概念
+### 2. The Essence of Accuracy Issues
+**Core Problem**: AI doesn't know the accurate answer, or confuses concepts
 
-**第一性分解**:
-- LLM 是基于概率的模式匹配，不是知识库
-- 训练数据可能有误/过时
-- 没有明确的"我不知道"边界
+**First Principles Breakdown**:
+- LLM is probability-based pattern matching, not a knowledge base
+- Training data may be incorrect/outdated
+- No clear "I don't know" boundary
 
-**优化方向**:
-- **严格知识边界**: 知识库命中 → 用固定答案；未命中 → 明确说"我不知道"
-- **意图分类器**: 先判断问题类型，再决定回答策略
-- **答案验证**: 知识库答案需要定期人工审核
-- **Fallback机制**: AI只回答"知识库未覆盖但安全"的问题
+**Optimization Directions**:
+- **Strict knowledge boundaries**: Knowledge base hit → Use fixed answer; Miss → Clearly say "I don't know"
+- **Intent classifier**: First classify question type, then decide response strategy
+- **Answer validation**: Knowledge base answers need regular human review
+- **Fallback mechanism**: AI only answers "knowledge base uncovered but safe" questions
 
-## 具体优化方案
+## Specific Optimization Solutions
 
-### 方案A: 分层响应架构
+### Solution A: Tiered Response Architecture
 
 ```
-用户消息
+User Message
   ↓
-[意图分类] (本地，<10ms)
-  - FAQ匹配 → 直接返回预设答案
-  - 知识库匹配 → 返回结构化答案
-  - 情感/反馈 → 记录并致谢
-  - 复杂问题 → AI生成
+[Intent Classification] (Local, <10ms)
+  - FAQ match → Return preset answer directly
+  - Knowledge base match → Return structured answer
+  - Sentiment/Feedback → Record and acknowledge
+  - Complex question → AI generation
   ↓
-[流式响应]
-  - 先发送 "🤔 让我想想..."
-  - 后台调用AI
-  - 编辑消息更新答案
+[Streaming Response]
+  - First send "🤔 Let me think..."
+  - Background AI call
+  - Edit message to update answer
 ```
 
-### 方案B: 知识库增强
+### Solution B: Knowledge Base Enhancement
 
-当前状态:
-- 12条简单FAQ
-- 关键词匹配（不准确）
+Current State:
+- 12 simple FAQ entries
+- Keyword matching (inaccurate)
 
-优化后:
-- 50+ 条覆盖所有常见场景
-- 向量相似度搜索（语义匹配）
-- 分级置信度阈值
-- 定期从实际对话中补充
+Optimized:
+- 50+ entries covering all common scenarios
+- Vector similarity search (semantic matching)
+- Tiered confidence thresholds
+- Regular supplementation from actual conversations
 
-### 方案C: 预生成策略
+### Solution C: Pre-generation Strategy
 
-对高频问题，预生成答案模板:
-- "什么是sol.site" → 固定3句话
-- "怎么注册域名" → 步骤列表
-- "费用是多少" → 价格表
+For high-frequency questions, pre-generate answer templates:
+- "What is sol.site" → Fixed 3 sentences
+- "How to register domain" → Step list
+- "What is the cost" → Price table
 
-### 方案D: 响应时间预算
+### Solution D: Response Time Budget
 
 ```
-目标: <2秒给出有用信息
+Goal: <2 seconds to provide useful information
 
-分配:
-- 意图分类: 50ms
-- 知识库查询: 100ms
-- 流式ACK: 立即发送
-- AI生成(如果需要): 1-3s（后台）
-- 消息编辑: 100ms
+Allocation:
+- Intent classification: 50ms
+- Knowledge base query: 100ms
+- Streaming ACK: Send immediately
+- AI generation (if needed): 1-3s (background)
+- Message edit: 100ms
 ```
 
-## 实施方案
+## Implementation Plan
 
-### 阶段1: 知识库扩充 (立即)
-- [x] 新增 emoji/CJK 条目
-- [ ] 添加所有 SNS V1/V2 操作指南
-- [ ] 添加所有 sol.site 功能说明
-- [ ] 添加故障排除条目
+### Phase 1: Knowledge Base Expansion (Immediate)
+- [x] Add emoji/CJK entries
+- [ ] Add all SNS V1/V2 operation guides
+- [ ] Add all sol.site feature descriptions
+- [ ] Add troubleshooting entries
 
-### 阶段2: 匹配算法优化 (短期)
-- [ ] 实现向量相似度搜索
-- [ ] 添加语义理解层
-- [ ] 多轮对话上下文追踪
+### Phase 2: Matching Algorithm Optimization (Short-term)
+- [ ] Implement vector similarity search
+- [ ] Add semantic understanding layer
+- [ ] Multi-turn conversation context tracking
 
-### 阶段3: 流式响应 (中期)
-- [ ] 实现"正在输入"状态
-- [ ] 消息编辑更新
-- [ ] 加载指示器
+### Phase 3: Streaming Response (Medium-term)
+- [ ] Implement "typing" status
+- [ ] Message edit updates
+- [ ] Loading indicator
 
-### 阶段4: 监控反馈 (长期)
-- [ ] 记录所有AI回复的用户反馈
-- [ ] 定期人工审核不准确回答
-- [ ] 自动知识库更新
+### Phase 4: Monitoring & Feedback (Long-term)
+- [ ] Record user feedback for all AI replies
+- [ ] Regular manual review of inaccurate answers
+- [ ] Automatic knowledge base updates
 
-## 当前改进 (基于文档抓取)
+## Current Improvements (Based on Document Scraping)
 
-1. **结构化知识库**: 从 docs.sns.id 提取所有官方答案
-2. **统一术语**: 区分 SNS 域名服务 vs sol.site 网站构建器
-3. **故障排除**: 覆盖常见问题（DNS、钱包、交易失败等）
-4. **边界声明**: 明确说明哪些是 ICANN 规则，哪些是 SNS 决策
+1. **Structured Knowledge Base**: Extract all official answers from docs.sns.id
+2. **Unified Terminology**: Distinguish SNS domain service vs sol.site website builder
+3. **Troubleshooting**: Cover common issues (DNS, wallet, transaction failures, etc.)
+4. **Boundary Statements**: Clarify which are ICANN rules vs SNS decisions
